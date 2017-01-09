@@ -4,30 +4,17 @@
 void ofApp::setup(){
     sphere.set(40,20);
     
-    
-//    path.moveTo(-50,-50);
-//    path.lineTo(-50,50);
-//    path.lineTo(50,50);
-//    path.lineTo(50,-50);
-//    path.close();
-    
-    path.moveTo(0,0);
-    
-    int numPoints = 10;
-
-    ofPoint t_dest = ofVec3f(ofRandom(250)+100);
-    
-    for(int i = 0; i < numPoints; i++){
-        ofPoint t_len = t_dest / numPoints;
-        ofPoint t_point = (t_len*i) + ofVec3f((ofRandomf()*10)-5,(ofRandomf()*10)-5,ofRandomf()*10)-5;
-        path.lineTo(t_point);
-    }
-    
-//    path.close();
+    setupBranch();
     
     path.setStrokeWidth(2);
     path.setStrokeColor(ofColor(0));
     path.setFilled(false);
+    
+    branch.add(branch_smooth.set("Smooth",4.0,0.0,20.0));
+    branch.add(branch_length.set("Length",20.0,0.0,20.0));
+    
+    gui.setup();
+    gui.add(branch);
 }
 
 //--------------------------------------------------------------
@@ -49,6 +36,8 @@ void ofApp::draw(){
             ofPushMatrix();
             ofTranslate(t_point);
             ofSetColor(ofColor(255,0,0));
+            ofNoFill();
+            ofSetSphereResolution(5);
             ofDrawSphere(0,0,2);
             ofSetColor(ofColor(0,0,255));
             ofDrawBitmapString(ofToString(i), 0,0);
@@ -56,11 +45,38 @@ void ofApp::draw(){
         }
     cam.end();
     ofDisableAntiAliasing();
+    
+    gui.draw();
+}
+
+//--------------------------------------------------------------
+void ofApp::setupBranch(){
+    path.moveTo(0,0);
+    
+    int numPoints = 10;
+    
+    ofPoint t_dest = ofVec3f(ofRandom(250)+100);
+    ofVec3f t_vec = ofVec3f(ofRandomf(),ofRandomf(),ofRandomf());
+    
+    ofPoint t_point = ofVec3f(0); //Origin (seed)
+    
+    for(int i = 0; i < numPoints; i++){
+        float t_len = ofRandom(branch_length)+(branch_length/2);
+        
+        t_point = t_point + (t_vec*t_len);
+        
+        path.lineTo(t_point);
+        
+        t_vec = t_vec + (ofRandomf()/branch_smooth);
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    if(key == 'b'){
+        path.clear();
+        setupBranch();
+    }
 }
 
 //--------------------------------------------------------------

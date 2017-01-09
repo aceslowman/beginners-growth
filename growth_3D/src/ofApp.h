@@ -9,6 +9,8 @@ class ofApp : public ofBaseApp{
 		void setup();
 		void update();
 		void draw();
+    
+    void setupBranch();
 
 		void keyPressed(int key);
 		void keyReleased(int key);
@@ -26,4 +28,8 @@ class ofApp : public ofBaseApp{
     ofSpherePrimitive sphere;
     
     ofPath path;
+    
+    ofxPanel gui;
+    ofParameterGroup branch;
+    ofParameter<float> branch_smooth, branch_length;
 };
