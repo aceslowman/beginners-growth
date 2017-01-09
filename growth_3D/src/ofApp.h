@@ -9,8 +9,9 @@ class ofApp : public ofBaseApp{
 		void setup();
 		void update();
 		void draw();
-    
-    void setupBranch();
+    void drawDebug();
+    void setupBranches(ofVec3f origin, ofVec3f initial_vector, float length, int segments);
+    void createBranch(ofVec3f origin, ofVec3f initial_vector, float length, int segments);
 
 		void keyPressed(int key);
 		void keyReleased(int key);
@@ -23,6 +24,8 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+    
+    bool debug;
 		
     ofEasyCam cam;
     ofSpherePrimitive sphere;
@@ -32,4 +35,5 @@ class ofApp : public ofBaseApp{
     ofxPanel gui;
     ofParameterGroup branch;
     ofParameter<float> branch_smooth, branch_length;
+    ofParameter<int> branch_levels, branch_segments;
 };

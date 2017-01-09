@@ -2,19 +2,21 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    sphere.set(40,20);
-    
-    setupBranch();
-    
     path.setStrokeWidth(2);
     path.setStrokeColor(ofColor(0));
     path.setFilled(false);
     
     branch.add(branch_smooth.set("Smooth",4.0,0.0,20.0));
     branch.add(branch_length.set("Length",20.0,0.0,20.0));
+    branch.add(branch_levels.set("Levels",1,1,10));
+    branch.add(branch_segments.set("Segments",15,1,50));
     
     gui.setup();
     gui.add(branch);
+    
+    
+    setupBranches(ofVec3f(0),ofVec3f(ofRandomf(),ofRandomf(),ofRandomf()),branch_length,branch_segments);
+    
 }
 
 //--------------------------------------------------------------
@@ -25,14 +27,25 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofEnableAntiAliasing();
+    ofEnableSmoothing();
     ofSetBackgroundColor(ofColor(255,255,255));
     ofSetColor(ofColor(0));
     
     cam.begin();
         path.draw();
-        for(int i = 0; i < path.getOutline()[0].size(); i++){
-            
-            ofPoint t_point = path.getOutline()[0].getPointAtIndexInterpolated(i);
+        if(debug)
+            drawDebug();
+    cam.end();
+    ofDisableAntiAliasing();
+    
+    gui.draw();
+}
+
+//--------------------------------------------------------------
+void ofApp::drawDebug(){
+    for(int i = 0; i < path.getOutline().size(); i++){
+        for(int j = 0; j < path.getOutline()[i].size(); j++){
+            ofPoint t_point = path.getOutline()[i].getPointAtIndexInterpolated(j);
             ofPushMatrix();
             ofTranslate(t_point);
             ofSetColor(ofColor(255,0,0));
@@ -43,22 +56,30 @@ void ofApp::draw(){
             ofDrawBitmapString(ofToString(i), 0,0);
             ofPopMatrix();
         }
-    cam.end();
-    ofDisableAntiAliasing();
-    
-    gui.draw();
+    }
 }
 
 //--------------------------------------------------------------
-void ofApp::setupBranch(){
-    path.moveTo(0,0);
+void ofApp::setupBranches(ofVec3f origin, ofVec3f initial_vector, float length, int segments){
+    createBranch(origin,initial_vector,length,segments);
+
+    for(int i = 0; i < path.getOutline()[0].size(); i++){
+        length = length / i;
+//        segments = segments / (i+1);
+        createBranch(path.getOutline()[0].getPointAtIndexInterpolated(i),initial_vector,length, segments);
+    }
+}
+
+//--------------------------------------------------------------
+void ofApp::createBranch(ofVec3f origin, ofVec3f initial_vector, float length, int segments){
     
-    int numPoints = 10;
+    path.moveTo(origin);
     
-    ofPoint t_dest = ofVec3f(ofRandom(250)+100);
-    ofVec3f t_vec = ofVec3f(ofRandomf(),ofRandomf(),ofRandomf());
+    int numPoints = segments;
     
-    ofPoint t_point = ofVec3f(0); //Origin (seed)
+    ofVec3f t_vec = initial_vector;
+    
+    ofPoint t_point = origin; //Origin (seed)
     
     for(int i = 0; i < numPoints; i++){
         float t_len = ofRandom(branch_length)+(branch_length/2);
@@ -66,16 +87,21 @@ void ofApp::setupBranch(){
         t_point = t_point + (t_vec*t_len);
         
         path.lineTo(t_point);
-        
-        t_vec = t_vec + (ofRandomf()/branch_smooth);
+
+        t_vec = ofVec3f(t_vec.x + (ofRandomf()/branch_smooth),t_vec.y + (ofRandomf()/branch_smooth),t_vec.z + (ofRandomf()/branch_smooth));
     }
+    
+    path.newSubPath();
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
     if(key == 'b'){
         path.clear();
-        setupBranch();
+        setupBranches(ofVec3f(0),ofVec3f(ofRandomf(),ofRandomf(),ofRandomf()),branch_length,branch_segments);
+    }
+    if(key == 'd'){
+        debug = !debug;
     }
 }
 
