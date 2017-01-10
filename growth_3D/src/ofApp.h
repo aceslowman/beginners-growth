@@ -25,7 +25,7 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
-    bool debug;
+    bool debug, b_orbit;
 		
     ofEasyCam cam;
     ofSpherePrimitive sphere;
@@ -33,7 +33,9 @@ class ofApp : public ofBaseApp{
     ofPath path;
     
     ofxPanel gui;
-    ofParameterGroup branch;
-    ofParameter<float> branch_smooth, branch_length;
-    ofParameter<int> branch_levels, branch_segments, cam_orbit, cam_lat;
+    ofParameterGroup branch_group;
+    ofParameter<float> branch_smooth, branch_length, branch_density;
+    ofParameter<int> branch_levels, branch_segments, cam_long, cam_lat;
+    
+    ofParameterGroup camera_group;
 };
