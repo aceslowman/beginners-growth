@@ -3,10 +3,11 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofSetVerticalSync(true);
-    path.setStrokeWidth(1);
+    path.setStrokeWidth(2);
     path.setStrokeColor(ofColor(0));
     path.setFilled(false);
     
+    outputFbo.allocate(ofGetWidth(),ofGetHeight());
     
     //TODO: Normalize all of these control values
     branch_group.add(branch_smooth.set("Smooth",4.0,0.0,20.0));
@@ -16,6 +17,7 @@ void ofApp::setup(){
     branch_group.add(branch_segments.set("Segments",8,1,50));
     camera_group.add(cam_long.set("Longitude",15,0,360));
     camera_group.add(cam_lat.set("Latitude",15,0,360));
+    camera_group.add(cam_fade.set("Fade",0,0,200));
     
     gui.setup();
     gui.add(branch_group);
@@ -24,32 +26,48 @@ void ofApp::setup(){
     setupBranches(ofVec3f(0),ofVec3f(ofRandomf(),ofRandomf(),ofRandomf()),branch_length,branch_segments);
     
     cam.setFarClip(20000.0);
+    
+    outputFbo.begin();
+    ofClear(255,255,255,0);
+    outputFbo.end();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    
+    ofEnableAlphaBlending();
+    ofEnableSmoothing();
+    ofEnableAntiAliasing();
+    
     if(b_orbit)
-    cam.orbit((ofGetElapsedTimef())*15,(ofGetElapsedTimef()*1.5)*15, 10000);
+    cam.orbit((ofGetElapsedTimef())*15,(ofGetElapsedTimef()*1.5)*15, 5000);
+    
+    outputFbo.begin();
+    
+    if( ofGetKeyPressed('c') ){
+        ofClear(255,255,255, 0);
+    }
+    
+    ofFill();
+    ofSetColor(255,255,255,cam_fade);
+    ofDrawRectangle(0,0,ofGetWidth(),ofGetHeight());
+    ofNoFill();
+    
+    cam.begin();
+    ofSetColor(ofColor(0));
+    ofPushMatrix();
+    path.draw();
+    if(debug)
+        drawDebug();
+    ofPopMatrix();
+    cam.end();
+    
+    outputFbo.end();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofEnableAntiAliasing();
-    ofEnableSmoothing();
-    ofSetBackgroundColor(ofColor(255,255,255));
-    ofSetColor(ofColor(0));
-    
-    cam.begin();
-    //TODO: translate the path so that the center of it is at 0,0,0
-    ofPushMatrix();
-//    ofTranslate(path.getOutline()[0].getBoundingBox().getCenter());
-        path.draw();
-        if(debug)
-            drawDebug();
-    ofPopMatrix();
-    cam.end();
-    ofDisableAntiAliasing();
-    
+    outputFbo.draw(0,0);
     gui.draw();
 }
 
@@ -121,6 +139,8 @@ void ofApp::keyPressed(int key){
     }
     if(key == 'c'){
         path.clear();
+        
+        
     }
     if(key == 'd'){
         debug = !debug;
