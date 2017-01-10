@@ -5,12 +5,14 @@
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
     "6A0127DE7FA543096F3B094B36349DCC271272AE" : 9223372036854775807,
-    "37526DA425E5430474A14FBFA1BC4525160B5FC1" : 9223372036854775807
+    "37526DA425E5430474A14FBFA1BC4525160B5FC1" : 9223372036854775807,
+    "F4CCB893AFADB97238A965FD2F28717F1CAAE613" : 9223372036854775807
   },
-  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "60229207-8E7A-412E-9748-9FFEA51BB130",
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "C6750D31-1B61-4CED-B4D8-DC6B46701225",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
     "6A0127DE7FA543096F3B094B36349DCC271272AE" : "beginners-growth\/",
-    "37526DA425E5430474A14FBFA1BC4525160B5FC1" : "..\/addons\/ofxCv"
+    "37526DA425E5430474A14FBFA1BC4525160B5FC1" : "..\/addons\/ofxCv",
+    "F4CCB893AFADB97238A965FD2F28717F1CAAE613" : "..\/addons\/ofxSyphon"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "growth_3D",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
@@ -25,6 +27,11 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/AustinSlominski\/beginners-growth.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "6A0127DE7FA543096F3B094B36349DCC271272AE"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/astellato\/ofxSyphon.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "F4CCB893AFADB97238A965FD2F28717F1CAAE613"
     }
   ]
 }

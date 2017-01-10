@@ -1,8 +1,12 @@
 ofxAssimpModelLoader
 ofxCv
 ofxGui
+ofxKinect
+ofxNetwork
 ofxOpenCv
 ofxOsc
 ofxSvg
+ofxSyphon
+ofxThreadedImageLoader
 ofxVectorGraphics
 ofxXmlSettings

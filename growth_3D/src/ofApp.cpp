@@ -31,7 +31,7 @@ void ofApp::setup(){
     ofClear(255,255,255,0);
     outputFbo.end();
 }
-
+//TODO: TRY SOME MULTICOLOR PATHS IN FBO
 //--------------------------------------------------------------
 void ofApp::update(){
     
@@ -40,7 +40,7 @@ void ofApp::update(){
     ofEnableAntiAliasing();
     
     if(b_orbit)
-    cam.orbit((ofGetElapsedTimef())*15,(ofGetElapsedTimef()*1.5)*15, 5000);
+        cam.orbit((ofGetElapsedTimef())*15,(ofGetElapsedTimef()*1.5)*15, 5000);
     
     outputFbo.begin();
     
@@ -68,6 +68,7 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     outputFbo.draw(0,0);
+    syphon.publishScreen();
     gui.draw();
 }
 
@@ -98,7 +99,7 @@ void ofApp::setupBranches(ofVec3f origin, ofVec3f initial_vector, float length, 
     
     for(int l = 0; l < branch_levels; l++){
         for(int i = 0; i < branch_count; i++){
-        
+            
             for(int j = 0; j < path.getOutline()[i].size(); j++){
                 if(ofRandomuf() < branch_density){
                     generateBranch(path.getOutline()[i].getPointAtIndexInterpolated(j), initial_vector.rotate(ofRandomf()*360, initial_vector), length, segments, current_level);
@@ -113,7 +114,7 @@ void ofApp::setupBranches(ofVec3f origin, ofVec3f initial_vector, float length, 
 //--------------------------------------------------------------
 void ofApp::generateBranch(ofVec3f origin, ofVec3f initial_vector, float length, int segments, int level){
     path.moveTo(origin);
-
+    
     int numPoints = segments / ((float)level + 1)*PI;
     
     ofVec3f t_vec = initial_vector;
@@ -125,7 +126,7 @@ void ofApp::generateBranch(ofVec3f origin, ofVec3f initial_vector, float length,
         t_point = t_point + (t_vec*t_len);
         
         path.lineTo(t_point);
-
+        
         t_vec = ofVec3f(t_vec.x + (ofRandomf()/branch_smooth),t_vec.y + (ofRandomf()/branch_smooth),t_vec.z + (ofRandomf()/branch_smooth));
     }
     
@@ -152,50 +153,50 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseEntered(int x, int y){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseExited(int x, int y){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::gotMessage(ofMessage msg){
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
-
+    
 }
