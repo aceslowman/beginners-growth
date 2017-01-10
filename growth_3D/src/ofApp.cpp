@@ -14,9 +14,7 @@ void ofApp::setup(){
     gui.setup();
     gui.add(branch);
     
-    
     setupBranches(ofVec3f(0),ofVec3f(ofRandomf(),ofRandomf(),ofRandomf()),branch_length,branch_segments);
-    
 }
 
 //--------------------------------------------------------------
@@ -44,6 +42,7 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::drawDebug(){
     for(int i = 0; i < path.getOutline().size(); i++){
+//        ofSetColor(ofFloatColor(ofRandomf(),ofRandomf(),ofRandomf()));
         for(int j = 0; j < path.getOutline()[i].size(); j++){
             ofPoint t_point = path.getOutline()[i].getPointAtIndexInterpolated(j);
             ofPushMatrix();
@@ -61,24 +60,33 @@ void ofApp::drawDebug(){
 
 //--------------------------------------------------------------
 void ofApp::setupBranches(ofVec3f origin, ofVec3f initial_vector, float length, int segments){
-    createBranch(origin,initial_vector,length,segments);
-
-    for(int i = 0; i < path.getOutline()[0].size(); i++){
-        length = length / i;
-//        segments = segments / (i+1);
-        createBranch(path.getOutline()[0].getPointAtIndexInterpolated(i),initial_vector,length, segments);
+    generateBranch(origin,initial_vector,length,segments,0);
+    
+    /*
+     Below is where the recursion takes place. First I get the outline of the new path...
+     Once that is found, generate a new branch with that point being the origin.
+     I need this to be done properly. I need this to perform generateBranch() of every point a certain number of times
+    */
+    int branch_count = 1;
+    
+    for(int l = 0; l < branch_levels; l++){
+        for(int i = 0; i < branch_count; i++){
+            //willing to bet that it gets stuck here because we keep increasing the number of paths
+            for(int j = 0; j < path.getOutline()[i].size(); j++){
+                generateBranch(path.getOutline()[i].getPointAtIndexInterpolated(j),initial_vector,length, segments, l);
+            }
+        }
+        branch_count++;
     }
 }
 
 //--------------------------------------------------------------
-void ofApp::createBranch(ofVec3f origin, ofVec3f initial_vector, float length, int segments){
-    
+void ofApp::generateBranch(ofVec3f origin, ofVec3f initial_vector, float length, int segments, int level){
     path.moveTo(origin);
     
     int numPoints = segments;
     
     ofVec3f t_vec = initial_vector;
-    
     ofPoint t_point = origin; //Origin (seed)
     
     for(int i = 0; i < numPoints; i++){

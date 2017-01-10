@@ -11,7 +11,7 @@ class ofApp : public ofBaseApp{
 		void draw();
     void drawDebug();
     void setupBranches(ofVec3f origin, ofVec3f initial_vector, float length, int segments);
-    void createBranch(ofVec3f origin, ofVec3f initial_vector, float length, int segments);
+    void generateBranch(ofVec3f origin, ofVec3f initial_vector, float length, int segments, int level);
 
 		void keyPressed(int key);
 		void keyReleased(int key);
