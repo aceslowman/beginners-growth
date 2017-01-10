@@ -35,5 +35,5 @@ class ofApp : public ofBaseApp{
     ofxPanel gui;
     ofParameterGroup branch;
     ofParameter<float> branch_smooth, branch_length;
-    ofParameter<int> branch_levels, branch_segments;
+    ofParameter<int> branch_levels, branch_segments, cam_orbit, cam_lat;
 };

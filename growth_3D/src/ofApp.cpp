@@ -2,7 +2,8 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    path.setStrokeWidth(2);
+    ofSetVerticalSync(true);
+    path.setStrokeWidth(1);
     path.setStrokeColor(ofColor(0));
     path.setFilled(false);
     
@@ -10,16 +11,20 @@ void ofApp::setup(){
     branch.add(branch_length.set("Length",20.0,0.0,20.0));
     branch.add(branch_levels.set("Levels",1,1,10));
     branch.add(branch_segments.set("Segments",15,1,50));
+    branch.add(cam_orbit.set("Orbit",15,0,360));
+    branch.add(cam_lat.set("Orbit",15,0,360));
     
     gui.setup();
     gui.add(branch);
     
     setupBranches(ofVec3f(0),ofVec3f(ofRandomf(),ofRandomf(),ofRandomf()),branch_length,branch_segments);
+    
+    cam.setFarClip(20000.0);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    
+    cam.orbit((ofGetElapsedTimef())*15,(ofGetElapsedTimef()*1.5)*15, 10000);
 }
 
 //--------------------------------------------------------------
@@ -62,19 +67,23 @@ void ofApp::drawDebug(){
 void ofApp::setupBranches(ofVec3f origin, ofVec3f initial_vector, float length, int segments){
     generateBranch(origin,initial_vector,length,segments,0);
     
-    /*
-     Below is where the recursion takes place. First I get the outline of the new path...
-     Once that is found, generate a new branch with that point being the origin.
-     I need this to be done properly. I need this to perform generateBranch() of every point a certain number of times
-    */
     int branch_count = 1;
+    
+    int current_level = 0;
     
     for(int l = 0; l < branch_levels; l++){
         for(int i = 0; i < branch_count; i++){
-            //willing to bet that it gets stuck here because we keep increasing the number of paths
             for(int j = 0; j < path.getOutline()[i].size(); j++){
-                generateBranch(path.getOutline()[i].getPointAtIndexInterpolated(j),initial_vector,length, segments, l);
+                
+                /*
+                    Initial vector shouldn't be used for each.
+                    Let's walk through the problem
+                    It looks like I am getting the unnatural shape that I am by using the initial vector only in each of the nested branches. I need the initial vector, but also a RANDOM rotation of it, around the axis, defined by the INITIAL VECTOR.
+                */
+                generateBranch(path.getOutline()[i].getPointAtIndexInterpolated(j), initial_vector.rotate(ofRandomf()*360, initial_vector), length, segments, current_level);
+//                generateBranch(path.getOutline()[i].getPointAtIndexInterpolated(j),ofVec3f(ofRandomf(),ofRandomf(),ofRandomf()),length, segments, l);
             }
+            current_level++;
         }
         branch_count++;
     }
@@ -84,18 +93,26 @@ void ofApp::setupBranches(ofVec3f origin, ofVec3f initial_vector, float length, 
 void ofApp::generateBranch(ofVec3f origin, ofVec3f initial_vector, float length, int segments, int level){
     path.moveTo(origin);
     
-    int numPoints = segments;
+    
+    // WHY ISN'T LEVEL SHOWING UP AS ANYTHING?
+    
+    int numPoints = segments / ((float)level + 1)*PI;
     
     ofVec3f t_vec = initial_vector;
     ofPoint t_point = origin; //Origin (seed)
     
     for(int i = 0; i < numPoints; i++){
-        float t_len = ofRandom(branch_length)+(branch_length/2);
+        float t_len = length / ((float)level + 1)*PI;
         
         t_point = t_point + (t_vec*t_len);
         
         path.lineTo(t_point);
 
+        /*
+            Below we update the vector to being the previous vector + something random.
+            since ofRandomf() returns -1 to 1, this should actually be fine. 
+            I guess it comes down to whether or not I ADD to the original vector, or just create a new one.
+         */
         t_vec = ofVec3f(t_vec.x + (ofRandomf()/branch_smooth),t_vec.y + (ofRandomf()/branch_smooth),t_vec.z + (ofRandomf()/branch_smooth));
     }
     
