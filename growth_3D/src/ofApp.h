@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxGui.h"
+#include "ofxGrowth.h"
 
 class ofApp : public ofBaseApp{
 
@@ -9,6 +10,7 @@ class ofApp : public ofBaseApp{
 		void setup();
 		void update();
 		void draw();
+    
     void drawDebug();
     void setupBranches(ofVec3f origin, ofVec3f initial_vector, float length, int segments);
     void generateBranch(ofVec3f origin, ofVec3f initial_vector, float length, int segments, int level);
@@ -33,12 +35,12 @@ class ofApp : public ofBaseApp{
     ofEasyCam cam;
     ofSpherePrimitive sphere;
     
-    ofPath path;
-    
     ofxPanel gui;
     ofParameterGroup branch_group;
     ofParameter<float> branch_smooth, branch_length, branch_density;
     ofParameter<int> branch_levels, branch_segments, cam_long, cam_lat;
     
     ofParameterGroup camera_group;
+    
+    Growth growth;
 };

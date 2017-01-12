@@ -3,9 +3,6 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofSetVerticalSync(true);
-    path.setStrokeWidth(1);
-    path.setStrokeColor(ofColor(0));
-    path.setFilled(false);
     
     branch_group.add(branch_smooth.set("Smooth",4.0,0.0,20.0));
     branch_group.add(branch_length.set("Length",20.0,0.0,20.0));
@@ -19,8 +16,6 @@ void ofApp::setup(){
     gui.setup();
     gui.add(branch_group);
     gui.add(camera_group);
-    
-    setupBranches(ofVec3f(0),ofVec3f(ofRandomf(),ofRandomf(),ofRandomf()),branch_length,branch_segments);
     
     cam.setFarClip(20000.0);
     
@@ -48,10 +43,10 @@ void ofApp::draw(){
     cam.begin();
         ofPushMatrix();
             ofTranslate(t_center);
-            path.draw();
-        
+            growth.drawGrowth();
+    
             if(debug){
-                drawDebug();
+                growth.drawDebug();
             }
         ofPopMatrix();
     cam.end();
@@ -61,83 +56,12 @@ void ofApp::draw(){
 }
 
 //--------------------------------------------------------------
-void ofApp::drawDebug(){
-    for(int i = 0; i < path.getOutline().size(); i++){
-        for(int j = 0; j < path.getOutline()[i].size(); j++){
-            ofPoint t_point = path.getOutline()[i].getPointAtIndexInterpolated(j);
-            ofPushMatrix();
-            ofTranslate(t_point);
-            ofSetColor(ofColor(255,0,0));
-            ofNoFill();
-            ofSetSphereResolution(5);
-            ofDrawSphere(0,0,2);
-            ofSetColor(ofColor(0,0,255));
-            ofDrawBitmapString(ofToString(i), 0,0);
-            ofPopMatrix();
-        }
-    }
-}
-
-//--------------------------------------------------------------
-void ofApp::setupBranches(ofVec3f origin, ofVec3f initial_vector, float length, int segments){
-    generateBranch(origin,initial_vector,length,segments,0);
-    
-    int branch_count = 1;
-    int current_level = 1;
-    
-    for(int l = 0; l <= branch_levels; l++){
-        for(int i = 0; i < branch_count; i++){
-        
-            for(int j = 0; j < path.getOutline()[i].size(); j++){
-                if(ofRandomuf() < branch_density){
-                    generateBranch(path.getOutline()[i].getPointAtIndexInterpolated(j), initial_vector.rotate(ofRandomf()*360, initial_vector), length, segments, current_level);
-                    if(current_level > 2){
-                        generateLeaf(path.getOutline()[i].getPointAtIndexInterpolated(j), initial_vector.rotate(ofRandomf()*360, initial_vector), length, segments, current_level);
-                    }
-                }
-            }
-            current_level++;
-        }
-        branch_count++;
-    }
-}
-
-//--------------------------------------------------------------
-void ofApp::generateBranch(ofVec3f origin, ofVec3f initial_vector, float length, int segments, int level){
-    path.moveTo(origin);
-
-    int numPoints = segments / ((float)level + 1)*PI;
-    
-    ofVec3f t_vec = initial_vector;
-    ofPoint t_point = origin;
-    
-    for(int i = 0; i < numPoints; i++){
-        float t_len = length / ((float)level + 1)*PI;
-
-        t_point = t_point + (t_vec*t_len);
-        
-        path.lineTo(t_point);
-
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        t_vec = ofVec3f(t_vec.x + (ofRandomf()/branch_smooth),t_vec.y + (ofRandomf()/branch_smooth),t_vec.z + (ofRandomf()/branch_smooth));
-    }
-    
-    path.newSubPath();
-}
-
-//--------------------------------------------------------------
-void ofApp::generateLeaf(ofVec3f origin, ofVec3f initial_vector, float length, int segments, int level){
-    //create a totally new subpath that I can close or tesselate.
-    ofDrawSphere(origin, 5);
-}
-
-//--------------------------------------------------------------
 void ofApp::keyPressed(int key){
     if(key == 'b'){
-        setupBranches(ofVec3f(0),ofVec3f(ofRandomf(),ofRandomf(),ofRandomf()),branch_length,branch_segments);
+        growth.setupBranches(ofVec3f(0),ofVec3f(ofRandomf(),ofRandomf(),ofRandomf()),branch_length,branch_segments);
     }
     if(key == 'c'){
-        path.clear();
+        growth.clear();
     }
     if(key == 'd'){
         debug = !debug;
@@ -148,9 +72,8 @@ void ofApp::keyPressed(int key){
     if(key == 's'){
         b_snapCenter = !b_snapCenter;
         
-        if(b_snapCenter == true && path.hasOutline()){
-            t_center = -path.getOutline()[0].getCentroid2D();
-            ofLog(OF_LOG_NOTICE,ofToString(t_center));
+        if(b_snapCenter == true && growth.hasOutline()){
+            t_center = -growth.getOutline()[0].getCentroid2D();
         }else{
             t_center = ofPoint(0);
         }
