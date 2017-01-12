@@ -7,8 +7,6 @@ void ofApp::setup(){
     path.setStrokeColor(ofColor(0));
     path.setFilled(false);
     
-    
-    //TODO: Normalize all of these control values
     branch_group.add(branch_smooth.set("Smooth",4.0,0.0,20.0));
     branch_group.add(branch_length.set("Length",20.0,0.0,20.0));
     branch_group.add(branch_density.set("Density",0.2,0.0,1.0));
@@ -76,9 +74,9 @@ void ofApp::setupBranches(ofVec3f origin, ofVec3f initial_vector, float length, 
     generateBranch(origin,initial_vector,length,segments,0);
     
     int branch_count = 1;
-    int current_level = 0;
+    int current_level = 1;
     
-    for(int l = 0; l < branch_levels; l++){
+    for(int l = 0; l <= branch_levels; l++){
         for(int i = 0; i < branch_count; i++){
         
             for(int j = 0; j < path.getOutline()[i].size(); j++){
@@ -96,13 +94,14 @@ void ofApp::setupBranches(ofVec3f origin, ofVec3f initial_vector, float length, 
 void ofApp::generateBranch(ofVec3f origin, ofVec3f initial_vector, float length, int segments, int level){
     path.moveTo(origin);
 
-    int numPoints = segments / ((float)level + 1)*PI;
+    int numPoints = segments / (float)level*PI;
     
     ofVec3f t_vec = initial_vector;
     ofPoint t_point = origin; //Origin (seed)
     
     for(int i = 0; i < numPoints; i++){
         float t_len = length / ((float)level + 1)*PI;
+        
         
         t_point = t_point + (t_vec*t_len);
         
