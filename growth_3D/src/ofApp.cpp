@@ -20,6 +20,8 @@ void ofApp::setup(){
     cam.setFarClip(20000.0);
     
     t_center = ofPoint(0);
+    
+    growth.setup(false, 2, 20.0);
 }
 
 //--------------------------------------------------------------
@@ -32,6 +34,7 @@ void ofApp::update(){
 void ofApp::draw(){
     ofEnableAntiAliasing();
     ofEnableSmoothing();
+    ofEnableDepthTest();
     
     ofSetBackgroundColor(ofColor(255,255,255));
     ofSetColor(ofColor(0));
@@ -51,6 +54,7 @@ void ofApp::draw(){
         ofPopMatrix();
     cam.end();
     ofDisableAntiAliasing();
+    ofDisableDepthTest();
     
     gui.draw();
 }
@@ -61,7 +65,7 @@ void ofApp::keyPressed(int key){
         growth.setupBranches(ofVec3f(0),ofVec3f(ofRandomf(),ofRandomf(),ofRandomf()),branch_length,branch_segments);
     }
     if(key == 'c'){
-        growth.clear();
+        growth.clearAll();
     }
     if(key == 'd'){
         debug = !debug;

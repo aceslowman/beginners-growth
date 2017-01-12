@@ -1,18 +1,20 @@
 #include "ofxGrowth.h"
 
 //--------------------------------------------------------------
-Growth::Growth(){
+void Growth::setup(bool isLeaf, int l, float len){
     this->setStrokeWidth(1);
     this->setStrokeColor(ofColor(0));
     this->setFilled(false);
     
     smoothness = 4.0;
-    length     = 20.0;
+    length     = len;
     density    = 0.2;
-    levels     = 2;
+    levels     = l;
     segments   = 8;
     
     setupBranches(ofVec3f(0),ofVec3f(ofRandomf(),ofRandomf(),ofRandomf()),length,segments);
+    
+    b_leaf = false;
 }
 
 //--------------------------------------------------------------
@@ -28,9 +30,6 @@ void Growth::setupBranches(ofVec3f origin, ofVec3f initial_vector, float length,
             for(int j = 0; j < this->getOutline()[i].size(); j++){
                 if(ofRandomuf() < density){
                     generateBranch(this->getOutline()[i].getPointAtIndexInterpolated(j), initial_vector.rotate(ofRandomf()*360, initial_vector), length, segments, current_level);
-                    if(current_level > 2){
-                        generateLeaf(this->getOutline()[i].getPointAtIndexInterpolated(j), initial_vector.rotate(ofRandomf()*360, initial_vector), length, segments, current_level);
-                    }
                 }
             }
             current_level++;
@@ -55,8 +54,13 @@ void Growth::generateBranch(ofVec3f origin, ofVec3f initial_vector, float length
         
         this->lineTo(t_point);
         
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         t_vec = ofVec3f(t_vec.x + (ofRandomf()/smoothness),t_vec.y + (ofRandomf()/smoothness),t_vec.z + (ofRandomf()/smoothness));
+        
+    if(ofRandomuf() < density*3.5){
+            if(level > 1){
+                generateLeaf(t_point, initial_vector.rotate(ofRandomf()*360, initial_vector), length, segments, level);
+            }
+        }
     }
     
     this->newSubPath();
@@ -64,13 +68,39 @@ void Growth::generateBranch(ofVec3f origin, ofVec3f initial_vector, float length
 
 //--------------------------------------------------------------
 void Growth::generateLeaf(ofVec3f origin, ofVec3f initial_vector, float length, int segments, int level){
-    //create a totally new subpath that I can close or tesselate.
-    ofDrawSphere(origin, 5);
+
+    ofPath t_leaf;
+    t_leaf.setStrokeWidth(1);
+    t_leaf.setStrokeColor(ofColor(0));
+    t_leaf.setFillColor(ofColor(0,255,255));
+    t_leaf.setFilled(true);
+    t_leaf.moveTo(origin);
+    
+    int numPoints = segments / ((float)level + 1)*PI;
+    
+    ofVec3f t_vec = initial_vector;
+    ofPoint t_point = origin;
+    
+    for(int i = 0; i < numPoints; i++){
+        float t_len = length / ((float)level + 1)*PI;
+        
+        t_point = t_point + (t_vec * t_len);
+        
+        t_leaf.lineTo(t_point);
+        
+        t_vec = ofVec3f(t_vec.x + (ofRandomf()/smoothness),t_vec.y + (ofRandomf()/smoothness),t_vec.z + (ofRandomf()/smoothness));
+    }
+    t_leaf.close();
+    
+    leaves.push_back(t_leaf);
 }
 
 //--------------------------------------------------------------
 void Growth::drawGrowth(){
     this->draw();
+    for(int i = 0; i < leaves.size(); i++){
+        leaves[i].draw();
+    }
 }
 
 //--------------------------------------------------------------
@@ -89,4 +119,10 @@ void Growth::drawDebug(){
             ofPopMatrix();
         }
     }
+}
+
+//--------------------------------------------------------------
+void Growth::clearAll(){
+    this->clear();
+    leaves.clear();
 }
