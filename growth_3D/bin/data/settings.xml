@@ -1,0 +1,15 @@
+<group>
+	<group/>
+	<Smooth>4</Smooth>
+	<Length>20</Length>
+	<Density>0.2</Density>
+	<Levels>2</Levels>
+	<Stroke>3</Stroke>
+	<Segments>8</Segments>
+	<Top_Path>123, 0, 0, 255</Top_Path>
+	<Fade_Color>0, 0, 0, 0</Fade_Color>
+	<Random_Colors?>0</Random_Colors?>
+	<Longitude>15</Longitude>
+	<Latitude>15</Latitude>
+	<Fade>1</Fade>
+</group>

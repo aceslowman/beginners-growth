@@ -35,9 +35,10 @@ public:
     
     ofxPanel gui;
     ofParameterGroup branch_group;
-    ofParameter<float> branch_smooth, branch_length, branch_density;
-    ofParameter<int> branch_levels, branch_segments, cam_long, cam_lat, cam_fade;
-    
+    ofParameter<float> branch_smooth, branch_length, branch_density, cam_fade;
+    ofParameter<int> branch_levels, branch_segments, branch_stroke, cam_long, cam_lat;
+    ofParameter<bool> b_randColor;
+    ofParameter<ofColor> path_top_color, fade_color;
     ofParameterGroup camera_group;
     
     ///////////////////////////////////////

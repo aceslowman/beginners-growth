@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofSetVerticalSync(true);
-    path.setStrokeWidth(2);
+    path.setStrokeWidth(3);
     path.setStrokeColor(ofColor(0));
     path.setFilled(false);
     
@@ -14,10 +14,14 @@ void ofApp::setup(){
     branch_group.add(branch_length.set("Length",20.0,0.0,20.0));
     branch_group.add(branch_density.set("Density",0.2,0.0,1.0));
     branch_group.add(branch_levels.set("Levels",2,1,10));
+    branch_group.add(branch_stroke.set("Stroke",2,1,100));
     branch_group.add(branch_segments.set("Segments",8,1,50));
+    branch_group.add(path_top_color.set("Top Path",ofColor(0,0,0,0)));
+    branch_group.add(fade_color.set("Fade Color",ofColor(0,0,0,0)));
+    branch_group.add(b_randColor.set("Random Colors?",false));
     camera_group.add(cam_long.set("Longitude",15,0,360));
     camera_group.add(cam_lat.set("Latitude",15,0,360));
-    camera_group.add(cam_fade.set("Fade",0,0,200));
+    camera_group.add(cam_fade.set("Fade",1.0,0.0,100.0));
     
     gui.setup();
     gui.add(branch_group);
@@ -31,7 +35,7 @@ void ofApp::setup(){
     ofClear(255,255,255,0);
     outputFbo.end();
 }
-//TODO: TRY SOME MULTICOLOR PATHS IN FBO
+
 //--------------------------------------------------------------
 void ofApp::update(){
     
@@ -42,32 +46,45 @@ void ofApp::update(){
     if(b_orbit)
         cam.orbit((ofGetElapsedTimef())*15,(ofGetElapsedTimef()*1.5)*15, 5000);
     
-    outputFbo.begin();
-    
-    if( ofGetKeyPressed('c') ){
-        ofClear(255,255,255, 0);
-    }
-    
-    ofFill();
-    ofSetColor(255,255,255,cam_fade);
-    ofDrawRectangle(0,0,ofGetWidth(),ofGetHeight());
-    ofNoFill();
-    
-    cam.begin();
-    ofSetColor(ofColor(0));
-    ofPushMatrix();
-    path.draw();
-    if(debug)
-        drawDebug();
-    ofPopMatrix();
-    cam.end();
-    
-    outputFbo.end();
+    path.setStrokeWidth(branch_stroke);
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    ofSetBackgroundColor(ofColor(0));
+    outputFbo.begin();
+    
+        if( ofGetKeyPressed('c') ){
+            ofClear(255,255,255,0);
+        }
+        
+        ofFill();
+        ofSetColor(fade_color);
+        ofDrawRectangle(0,0,ofGetWidth(),ofGetHeight());
+        ofNoFill();
+        
+        cam.begin();
+            if(b_randColor){
+                path.setStrokeColor(ofFloatColor(ofRandomuf(),ofRandomuf(),ofRandomuf()));
+            }else{
+                path.setStrokeColor( ofFloatColor(sin(ofGetElapsedTimef()*0.2),sin(ofGetElapsedTimef()*0.5),sin(ofGetElapsedTimef())) );
+            }
+            ofPushMatrix();
+            path.draw();
+            if(debug)
+                drawDebug();
+            ofPopMatrix();
+        cam.end();
+    
+    outputFbo.end();
+    
     outputFbo.draw(0,0);
+    
+    cam.begin();
+        path.setColor(path_top_color);
+        path.draw();
+    cam.end();
+    
     syphon.publishScreen();
     gui.draw();
 }
@@ -140,8 +157,6 @@ void ofApp::keyPressed(int key){
     }
     if(key == 'c'){
         path.clear();
-        
-        
     }
     if(key == 'd'){
         debug = !debug;
