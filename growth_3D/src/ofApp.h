@@ -12,6 +12,7 @@ class ofApp : public ofBaseApp{
     void drawDebug();
     void setupBranches(ofVec3f origin, ofVec3f initial_vector, float length, int segments);
     void generateBranch(ofVec3f origin, ofVec3f initial_vector, float length, int segments, int level);
+    void generateLeaf(ofVec3f origin, ofVec3f initial_vector, float length, int segments, int level);
 
 		void keyPressed(int key);
 		void keyReleased(int key);
@@ -25,8 +26,10 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
-    bool debug, b_orbit;
+    bool debug, b_orbit, b_snapCenter;
 		
+    ofPoint t_center;
+    
     ofEasyCam cam;
     ofSpherePrimitive sphere;
     

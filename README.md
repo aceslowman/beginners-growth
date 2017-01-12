@@ -1,6 +1,8 @@
 # beginners-growth
 Procedural plant experiments
 
+Before I begin exploring L-Systems, I want to see if I can mimic plant growth similar to what I might draw by hand.
+
 ## Algorithmic/Procedural/Generative
 
 ### First Sequence (wiry plants with sparse leaves)

@@ -12,6 +12,7 @@ void ofApp::setup(){
     branch_group.add(branch_density.set("Density",0.2,0.0,1.0));
     branch_group.add(branch_levels.set("Levels",2,1,10));
     branch_group.add(branch_segments.set("Segments",8,1,50));
+    
     camera_group.add(cam_long.set("Longitude",15,0,360));
     camera_group.add(cam_lat.set("Latitude",15,0,360));
     
@@ -22,6 +23,8 @@ void ofApp::setup(){
     setupBranches(ofVec3f(0),ofVec3f(ofRandomf(),ofRandomf(),ofRandomf()),branch_length,branch_segments);
     
     cam.setFarClip(20000.0);
+    
+    t_center = ofPoint(0);
 }
 
 //--------------------------------------------------------------
@@ -34,17 +37,23 @@ void ofApp::update(){
 void ofApp::draw(){
     ofEnableAntiAliasing();
     ofEnableSmoothing();
+    
     ofSetBackgroundColor(ofColor(255,255,255));
     ofSetColor(ofColor(0));
     
+    if(b_snapCenter){
+        ofDrawBitmapString("SNAP",30,30);
+    }
+    
     cam.begin();
-    //TODO: translate the path so that the center of it is at 0,0,0
-    ofPushMatrix();
-//    ofTranslate(path.getOutline()[0].getBoundingBox().getCenter());
-        path.draw();
-        if(debug)
-            drawDebug();
-    ofPopMatrix();
+        ofPushMatrix();
+            ofTranslate(t_center);
+            path.draw();
+        
+            if(debug){
+                drawDebug();
+            }
+        ofPopMatrix();
     cam.end();
     ofDisableAntiAliasing();
     
@@ -82,6 +91,9 @@ void ofApp::setupBranches(ofVec3f origin, ofVec3f initial_vector, float length, 
             for(int j = 0; j < path.getOutline()[i].size(); j++){
                 if(ofRandomuf() < branch_density){
                     generateBranch(path.getOutline()[i].getPointAtIndexInterpolated(j), initial_vector.rotate(ofRandomf()*360, initial_vector), length, segments, current_level);
+                    if(current_level > 2){
+                        generateLeaf(path.getOutline()[i].getPointAtIndexInterpolated(j), initial_vector.rotate(ofRandomf()*360, initial_vector), length, segments, current_level);
+                    }
                 }
             }
             current_level++;
@@ -94,23 +106,29 @@ void ofApp::setupBranches(ofVec3f origin, ofVec3f initial_vector, float length, 
 void ofApp::generateBranch(ofVec3f origin, ofVec3f initial_vector, float length, int segments, int level){
     path.moveTo(origin);
 
-    int numPoints = segments / (float)level*PI;
+    int numPoints = segments / ((float)level + 1)*PI;
     
     ofVec3f t_vec = initial_vector;
-    ofPoint t_point = origin; //Origin (seed)
+    ofPoint t_point = origin;
     
     for(int i = 0; i < numPoints; i++){
         float t_len = length / ((float)level + 1)*PI;
-        
-        
+
         t_point = t_point + (t_vec*t_len);
         
         path.lineTo(t_point);
 
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         t_vec = ofVec3f(t_vec.x + (ofRandomf()/branch_smooth),t_vec.y + (ofRandomf()/branch_smooth),t_vec.z + (ofRandomf()/branch_smooth));
     }
     
     path.newSubPath();
+}
+
+//--------------------------------------------------------------
+void ofApp::generateLeaf(ofVec3f origin, ofVec3f initial_vector, float length, int segments, int level){
+    //create a totally new subpath that I can close or tesselate.
+    ofDrawSphere(origin, 5);
 }
 
 //--------------------------------------------------------------
@@ -127,11 +145,21 @@ void ofApp::keyPressed(int key){
     if(key == 'o'){
         b_orbit = !b_orbit;
     }
+    if(key == 's'){
+        b_snapCenter = !b_snapCenter;
+        
+        if(b_snapCenter == true && path.hasOutline()){
+            t_center = -path.getOutline()[0].getCentroid2D();
+            ofLog(OF_LOG_NOTICE,ofToString(t_center));
+        }else{
+            t_center = ofPoint(0);
+        }
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-
+    
 }
 
 //--------------------------------------------------------------
