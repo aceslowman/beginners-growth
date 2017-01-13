@@ -70,6 +70,12 @@ void Growth::generateBranch(ofVec3f origin, ofVec3f initial_vector, float length
 
 //--------------------------------------------------------------
 void Growth::generateLeaf(ofVec3f origin, ofVec3f initial_vector, float length, int segments, int level){
+    /*
+        What I know I need to do now, is use ofMesh for these leaves. 
+        I can still generate points in essentially the same way, flipping, 
+        and rotate, etc, but I need the ability to carefully setup indices.
+     */
+    
     float theta   = 20.0;
     int numPoints = segments / ((float)level + 1)*2*PI;
     
