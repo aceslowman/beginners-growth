@@ -2,6 +2,8 @@
 
 //--------------------------------------------------------------
 void Growth::setup(bool isLeaf, int l, float len){
+    glCullFace(GL_BACK);
+    
     this->setStrokeWidth(1);
     this->setStrokeColor(ofColor(0));
     this->setFilled(false);
@@ -56,8 +58,8 @@ void Growth::generateBranch(ofVec3f origin, ofVec3f initial_vector, float length
         
         t_vec = ofVec3f(t_vec.x + (ofRandomf()/smoothness),t_vec.y + (ofRandomf()/smoothness),t_vec.z + (ofRandomf()/smoothness));
         
-    if(ofRandomuf() < density*3.5){
-            if(level > 1){
+        if(ofRandomuf() < density*3.5){
+            if(level > 2){
                 generateLeaf(t_point, initial_vector.rotate(ofRandomf()*360, initial_vector), length, segments, level);
             }
         }
@@ -68,29 +70,43 @@ void Growth::generateBranch(ofVec3f origin, ofVec3f initial_vector, float length
 
 //--------------------------------------------------------------
 void Growth::generateLeaf(ofVec3f origin, ofVec3f initial_vector, float length, int segments, int level){
-
-    ofPath t_leaf;
-    t_leaf.setStrokeWidth(1);
-    t_leaf.setStrokeColor(ofColor(0));
-    t_leaf.setFillColor(ofColor(0,255,255));
-    t_leaf.setFilled(true);
-    t_leaf.moveTo(origin);
-    
-    int numPoints = segments / ((float)level + 1)*PI;
+    float theta   = 20.0;
+    int numPoints = segments / ((float)level + 1)*2*PI;
     
     ofVec3f t_vec = initial_vector;
     ofPoint t_point = origin;
+    ofPoint t_point_mirrored = origin;
+    
+    ofPath t_leaf, t_leaf_mirrored;
+    
+    t_leaf.setStrokeWidth(1);
+    t_leaf.setStrokeColor(ofColor(0,0,0));
+    t_leaf.setFillColor(ofColor(0,255,255));
+    t_leaf.setFilled(true);
+    
+    t_leaf_mirrored.setStrokeWidth(1);
+    t_leaf_mirrored.setStrokeColor(ofColor(0,255,0));
+    t_leaf_mirrored.setFillColor(ofColor(0,255,255));
+    t_leaf_mirrored.setFilled(false);
+    
+    t_leaf.moveTo(origin);
+    t_leaf_mirrored.moveTo(origin);
     
     for(int i = 0; i < numPoints; i++){
-        float t_len = length / ((float)level + 1)*PI;
+        float t_len = length / ((float)level + 1)*2*PI;
         
+        t_point_mirrored = t_point_mirrored + (ofVec3f(-t_vec.x,t_vec.y,t_vec.z) * t_len);
         t_point = t_point + (t_vec * t_len);
         
         t_leaf.lineTo(t_point);
-        
+        t_leaf_mirrored.lineTo(t_point_mirrored.getRotated(theta, origin, t_vec));
+
         t_vec = ofVec3f(t_vec.x + (ofRandomf()/smoothness),t_vec.y + (ofRandomf()/smoothness),t_vec.z + (ofRandomf()/smoothness));
     }
-    t_leaf.close();
+    
+//    t_leaf.append(t_leaf_mirrored);
+//    t_leaf.tessellate();
+//    t_leaf.close();
     
     leaves.push_back(t_leaf);
 }
@@ -98,8 +114,11 @@ void Growth::generateLeaf(ofVec3f origin, ofVec3f initial_vector, float length, 
 //--------------------------------------------------------------
 void Growth::drawGrowth(){
     this->draw();
-    for(int i = 0; i < leaves.size(); i++){
-        leaves[i].draw();
+    if(b_drawLeaves){
+        for(int i = 0; i < leaves.size(); i++){
+            leaves[i].draw();
+//            leaves[i].getTessellation().draw();
+        }
     }
 }
 

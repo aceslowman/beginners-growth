@@ -17,7 +17,7 @@ public:
     float smoothness, length, density;
     int   levels, segments;
     
-    bool b_leaf;
+    bool b_leaf, b_drawLeaves;
     
     vector<ofPath> leaves;
 //    vector<ofSpherePrimitive> leaves;

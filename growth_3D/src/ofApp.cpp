@@ -73,6 +73,9 @@ void ofApp::keyPressed(int key){
     if(key == 'o'){
         b_orbit = !b_orbit;
     }
+    if(key == 'l'){
+        growth.b_drawLeaves = !growth.b_drawLeaves;
+    }
     if(key == 's'){
         b_snapCenter = !b_snapCenter;
         
