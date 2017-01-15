@@ -2,6 +2,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    glCullFace(GL_BACK);
     ofSetVerticalSync(true);
     
     branch_group.add(branch_smooth.set("Smooth",4.0,0.0,20.0));

@@ -1,18 +1,12 @@
 #include "ofxGrowth.h"
 
 //--------------------------------------------------------------
-void Growth::setup(bool isLeaf, int l, float len){
-    glCullFace(GL_BACK);
-    
-    this->setStrokeWidth(1);
-    this->setStrokeColor(ofColor(0));
-    this->setFilled(false);
-    
-    smoothness = 4.0;
-    length     = len;
-    density    = 0.2;
-    levels     = l;
-    segments   = 8;
+void Growth::setup(){
+    this->density      = ofRandomuf();
+    this->length       = ofRandomuf();
+    this->segments     = ofRandom(10);
+    this->depth        = ofRandom(10);
+    this->straightness = ofRandomuf();
     
     setupBranches(ofVec3f(0),ofVec3f(ofRandomf(),ofRandomf(),ofRandomf()),length,segments);
     
@@ -80,6 +74,7 @@ void Growth::generateLeaf(ofVec3f origin, ofVec3f initial_vector, float length, 
     ofMesh t_leaf;
     
     t_leaf.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
+    t_leaf.setMode(OF_PRIMITIVE_LINE_STRIP);
     
     t_leaf.addVertex(origin);
     t_leaf.addColor(ofFloatColor(0,0,1));
