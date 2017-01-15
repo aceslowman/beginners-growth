@@ -19,6 +19,6 @@ public:
     
     bool b_leaf, b_drawLeaves;
     
-    vector<ofPath> leaves;
+    vector<ofMesh> leaves;
 //    vector<ofSpherePrimitive> leaves;
 };

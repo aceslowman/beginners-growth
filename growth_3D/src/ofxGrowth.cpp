@@ -70,49 +70,34 @@ void Growth::generateBranch(ofVec3f origin, ofVec3f initial_vector, float length
 
 //--------------------------------------------------------------
 void Growth::generateLeaf(ofVec3f origin, ofVec3f initial_vector, float length, int segments, int level){
-    /*
-        What I know I need to do now, is use ofMesh for these leaves. 
-        I can still generate points in essentially the same way, flipping, 
-        and rotate, etc, but I need the ability to carefully setup indices.
-     */
-    
-    float theta   = 20.0;
+    float theta   = 0.2;
     int numPoints = segments / ((float)level + 1)*2*PI;
     
     ofVec3f t_vec = initial_vector;
     ofPoint t_point = origin;
     ofPoint t_point_mirrored = origin;
     
-    ofPath t_leaf, t_leaf_mirrored;
+    ofMesh t_leaf;
     
-    t_leaf.setStrokeWidth(1);
-    t_leaf.setStrokeColor(ofColor(0,0,0));
-    t_leaf.setFillColor(ofColor(0,255,255));
-    t_leaf.setFilled(true);
+    t_leaf.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
     
-    t_leaf_mirrored.setStrokeWidth(1);
-    t_leaf_mirrored.setStrokeColor(ofColor(0,255,0));
-    t_leaf_mirrored.setFillColor(ofColor(0,255,255));
-    t_leaf_mirrored.setFilled(false);
-    
-    t_leaf.moveTo(origin);
-    t_leaf_mirrored.moveTo(origin);
+    t_leaf.addVertex(origin);
+    t_leaf.addColor(ofFloatColor(0,0,1));
     
     for(int i = 0; i < numPoints; i++){
-        float t_len = length / ((float)level + 1)*2*PI;
-        
-        t_point_mirrored = t_point_mirrored + (ofVec3f(-t_vec.x,t_vec.y,t_vec.z) * t_len);
-        t_point = t_point + (t_vec * t_len);
-        
-        t_leaf.lineTo(t_point);
-        t_leaf_mirrored.lineTo(t_point_mirrored.getRotated(theta, origin, t_vec));
+        float t_len = length / ((float)level + 1)*3*PI;
 
+        t_point = t_point + (t_vec * t_len);
+        t_point_mirrored = t_point_mirrored + (ofVec2f(-t_vec.x,t_vec.y)*t_len);
+
+        t_leaf.addVertex(t_point);
+        t_leaf.addColor(ofFloatColor(1,0,0));
+        t_leaf.addVertex(t_point_mirrored.rotate(theta, origin, t_vec));
+
+        t_leaf.addColor(ofFloatColor(0,1,0));
+        
         t_vec = ofVec3f(t_vec.x + (ofRandomf()/smoothness),t_vec.y + (ofRandomf()/smoothness),t_vec.z + (ofRandomf()/smoothness));
     }
-    
-//    t_leaf.append(t_leaf_mirrored);
-//    t_leaf.tessellate();
-//    t_leaf.close();
     
     leaves.push_back(t_leaf);
 }
