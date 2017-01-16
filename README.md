@@ -117,10 +117,10 @@ int t_segments = this->segments * pow(f_dim,level);
 float t_length = this->length   * pow(f_dim,level);
 ```
 
-Now, to actual work through the cycle, I need to calculate the point for step 1. t_point is the vector, times the length, plus the previous t_point.
+Now, to actually work through the cycle, I need to calculate the point for step 1. t_point is the vector, times the length (which is random, with t_length as the maximum), plus the previous t_point.
 
 ```
-t_point = t_point + (t_vec * t_length);
+t_point = t_point + (t_vec * ( t_length * ofRandomuf() ) );
 ```
 
 After everything else is calculated, at the end of the loop I need to prepare the new semi-random vector. The vector is the previous vector, plus a random direction, -1 to 1, diminished by a degree of smoothness.
@@ -133,57 +133,35 @@ t_vec = ofVec3f(
 );
 ```
 
-NOTE NOTE NOTE: This is actually a spot where I lose the ability to properly diminish the size. If the vector is always adding or removing some amount from the previous vector, and `t_point = t_point + (t_vec * t_length);`, then I will get unpredictable lengths based on straightness. I need to get random t_length based off of length, which needs to update with every point. T_VEC NEEDS TO BE A UNIT VECTOR
-
-```
-t_point = t_point + (t_vec * ( t_length * ofRandomuf() ) );
-```
-
-There is an opportunity to create some simple debugging colors here as well. The further along the branch you get, the more the colors turn from 1,0,0 to 0,0,1.
-
-```
-t_mesh.addColor(ofFloatColor(i/t_segments,1 - (i/t_segments),0));
-```
-
-Also, I need to have the type of drawing mode change, depending on what level we are at.
-
 ```
 void Growth::generateBranch(ofVec3f origin, ofVec3f initial_vector, int level){
-  ofMesh t_mesh;
+    ofPath t_path;
 
-  if(current_level > leaf_level){
-    t_mesh.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
-  }else{
-    t_mesh.setMode(OF_PRIMITIVE_LINE_STRIP);
-  }
+    this->moveTo(origin);
 
-  //Diminish parameters
-  int t_segments = this->segments * pow(f_dim,level);
-  float t_length = this->length   * pow(f_dim,level);
+    //Diminish parameters
+    int t_segments = this->segments * pow(f_dim,level);
+    float t_length = this->length   * pow(f_dim,level);
 
-  //Initialize t_point to match initial point
-  ofVec3f t_point = origin;
+    //Initialize vector and point
+    ofVec3f t_vec = initial_vector;
+    ofVec3f t_point = origin;
 
-  //begin assembling one cycle of sequence
-  for(int i = 0; i < t_segments; i++){
+    //begin assembling one cycle of sequence
+    for(int i = 0; i < t_segments; i++){
 
-    t_point = t_point + (t_vec * ( t_length * ofRandomuf() ) );
+        t_point = t_point + (t_vec * ( t_length * ofRandomuf() ) );
 
-    t_mesh.addVertex(t_point);
-    t_mesh.addColor(ofFloatColor(i/t_segments,1 - (i/t_segments),0));
+        this->lineTo(t_point);
 
-    t_vec = ofVec3f(
-      ofClamp(t_vec.x + (ofRandomf() * straightness),0.0,1.0),
-      ofClamp(t_vec.y + (ofRandomf() * straightness),0.0,1.0),
-      ofClamp(t_vec.z + (ofRandomf() * straightness),0.0,1.0)
-    );
-  }
+        t_vec = ofVec3f(
+                        ofClamp(t_vec.x + (ofRandomf() * straightness),0.0,1.0),
+                        ofClamp(t_vec.y + (ofRandomf() * straightness),0.0,1.0),
+                        ofClamp(t_vec.z + (ofRandomf() * straightness),0.0,1.0)
+                        );
+    }
 
-  if(current_level > leaf_level){
-    leaves.push_back(t_mesh);
-  }else{
-    branch.append(t_mesh);
-  }
+    this->newSubPath();
 }
 ```
 
@@ -201,20 +179,30 @@ How do I target individual branches, in the same way I did for ofPath?
 
 ```
 void Growth::setupBranch(){
-  int current_branch = 1;
-  int current_level  = 1;
 
-  for(int i = 0; i <= this->depth; i++){ // loop a level
-    for(int j = 0; j < current_branch; j++){  // loop through each node
-      for(EACH NODE IN THIS BRANCH){
-        if(ofRandomuf() < this->density){ //introduce probability
-          generateBranch(THIS CURRENT NODE, initial_vector.rotate(ofRandomf()*360, initial_vector), current_level);
+    ofVec3f initial_vector = ofVec3f(ofRandomf(),ofRandomf(),ofRandomf());
+
+    generateBranch(this->origin, initial_vector, 0);
+
+    int current_branch = 1;
+    int current_level  = 1;
+
+    for(int i = 0; i <= this->depth; i++){
+
+        for(int j = 0; j < current_branch; j++){
+
+            for(int k = 0; k < this->getOutline()[i].size(); k++){
+                ofVec3f current_node_position = this->getOutline()[i].getPointAtIndexInterpolated(k);
+                ofVec3f t_vec = initial_vector.rotate(ofRandomf()*360, initial_vector);
+
+                if(ofRandomuf() < this->density){
+                    generateBranch(current_node_position, t_vec, current_level);
+                }
+            }
+            current_branch++;
         }
-      }
-      current_branch++;
+        current_level++;
     }
-    current_level++;
-  }
 }
 ```
 
@@ -222,7 +210,7 @@ void Growth::setupBranch(){
 
 I am starting to question creating the mesh throughout the process. I think that this might be a misunderstanding of the purpose of ofPath and ofMesh individually, but if I was to use ofPath, with meticulously managed indices and hierarchies, THEN, create a seperate set of methods to handle meshing the paths, with it's own level logic and attention to depth.
 
-I think this actually might be better, now that I'm seeing that the use of ofMesh won't really allow me to say, loop through all individual branches seperately. There just wouldn't be the logic present in the mesh.
+I think this actually might be better, now that I'm seeing that the use of ofMesh won't really allow me to say, loop through all individual branches seperately. There just wouldn't be the logic present in the mesh. Rewriting the generateBranch section, then the setupBranch section.
 ---
 
   ![Screenshot](../images/basic-sequence.png?raw=true)

@@ -22,7 +22,7 @@ void ofApp::setup(){
     
     t_center = ofPoint(0);
     
-    growth.setup(false, 2, 20.0);
+    growth.setup();
 }
 
 //--------------------------------------------------------------
@@ -47,11 +47,8 @@ void ofApp::draw(){
     cam.begin();
         ofPushMatrix();
             ofTranslate(t_center);
-            growth.drawGrowth();
+            growth.drawPath();
     
-            if(debug){
-                growth.drawDebug();
-            }
         ofPopMatrix();
     cam.end();
     ofDisableAntiAliasing();
@@ -63,7 +60,7 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
     if(key == 'b'){
-        growth.setupBranches(ofVec3f(0),ofVec3f(ofRandomf(),ofRandomf(),ofRandomf()),branch_length,branch_segments);
+        growth.setup();
     }
     if(key == 'c'){
         growth.clearAll();
@@ -73,9 +70,6 @@ void ofApp::keyPressed(int key){
     }
     if(key == 'o'){
         b_orbit = !b_orbit;
-    }
-    if(key == 'l'){
-        growth.b_drawLeaves = !growth.b_drawLeaves;
     }
     if(key == 's'){
         b_snapCenter = !b_snapCenter;
