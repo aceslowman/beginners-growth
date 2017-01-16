@@ -11,11 +11,6 @@ class ofApp : public ofBaseApp{
 		void update();
 		void draw();
     
-    void drawDebug();
-    void setupBranches(ofVec3f origin, ofVec3f initial_vector, float length, int segments);
-    void generateBranch(ofVec3f origin, ofVec3f initial_vector, float length, int segments, int level);
-    void generateLeaf(ofVec3f origin, ofVec3f initial_vector, float length, int segments, int level);
-
 		void keyPressed(int key);
 		void keyReleased(int key);
 		void mouseMoved(int x, int y );
@@ -24,23 +19,19 @@ class ofApp : public ofBaseApp{
 		void mouseReleased(int x, int y, int button);
 		void mouseEntered(int x, int y);
 		void mouseExited(int x, int y);
-		void windowResized(int w, int h);
-		void dragEvent(ofDragInfo dragInfo);
-		void gotMessage(ofMessage msg);
     
-    bool debug, b_orbit, b_snapCenter;
+    bool debug;
 		
-    ofPoint t_center;
-    
     ofEasyCam cam;
-    ofSpherePrimitive sphere;
     
     ofxPanel gui;
-    ofParameterGroup branch_group;
-    ofParameter<float> branch_smooth, branch_length, branch_density;
-    ofParameter<int> branch_levels, branch_segments, cam_long, cam_lat;
+    ofParameterGroup growth_group;
     
-    ofParameterGroup camera_group;
-    
+    ofParameter<float> growth_density;
+    ofParameter<float> growth_length;
+    ofParameter<int>   growth_segments;
+    ofParameter<int>   growth_depth;
+    ofParameter<float> growth_straightness;
+
     Growth growth;
 };
