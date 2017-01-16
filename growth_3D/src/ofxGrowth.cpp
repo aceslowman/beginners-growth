@@ -19,6 +19,35 @@ void Growth::setup(){
     branches.resize(this->depth);
     
     setupBranch();
+    colorMesh(0);
+}
+
+//--------------------------------------------------------------
+void Growth::colorMesh(int coloring_type){
+    switch (coloring_type) {
+        case 0: //color for each branch
+            
+            for(int i = 0; i < branches.size(); i++){
+                ofFloatColor branch_color = ofFloatColor(ofRandomuf(),ofRandomuf(),ofRandomuf());
+                
+                for(int j = 0; j < branches[i].size(); j++){
+                    vector<ofIndexType> t_ind = branches[i][j].getIndices();
+                    branches[i][j].addColors(&branch_color, branches[i][j].getVertices().size());
+                    for(int k = 0; k < branches[i][j].getVertices().size(); k++){
+                        
+                        branches[i][j].setColor(k, branch_color);
+                    }
+                }
+            }
+            
+            break;
+            
+        case 1: //color for each level
+            
+            break;
+        default:
+            break;
+    }
 }
 
 //--------------------------------------------------------------
@@ -28,16 +57,14 @@ void Growth::addMesh(ofPolyline poly, int level){
      organized as
      
      branches[level][branch_id]
-     
-     
-     right now the problem is with creating that initial level (which needs to be created and entered
-     immediately after the first generateBranch...)
      */
 
     ofMesh t_mesh;
-//    t_mesh.setMode(OF_PRIMITIVE_POINTS);
     t_mesh.setMode(OF_PRIMITIVE_LINE_STRIP);
+    t_mesh.setupIndicesAuto();
+    
     t_mesh.addVertices(poly.getVertices());
+    
     
     branches[level].push_back(t_mesh);
 }
@@ -107,7 +134,13 @@ void Growth::drawPaths(){
 
 //--------------------------------------------------------------
 void Growth::drawPoints(){
-
+    for(int i = 0; i < branches.size(); i++){
+        for(int j = 0; j < branches[i].size(); j++){
+            branches[i][j].setMode(OF_PRIMITIVE_POINTS);
+            branches[i][j].setMode(OF_PRIMITIVE_POINTS);
+            branches[i][j].draw();
+        }
+    }
 }
 
 //--------------------------------------------------------------
@@ -122,4 +155,5 @@ void Growth::drawMeshes(){
 //--------------------------------------------------------------
 void Growth::clearAll(){
     this->clear();
+    branches.clear();
 }

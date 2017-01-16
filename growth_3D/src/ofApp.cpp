@@ -32,7 +32,7 @@ void ofApp::draw(){
     ofEnableSmoothing();
     ofEnableDepthTest();
     
-    ofSetBackgroundColor(ofColor(255,255,255));
+    ofSetBackgroundColor(ofFloatColor(1));
     ofSetColor(ofColor(0));
     
     cam.begin();

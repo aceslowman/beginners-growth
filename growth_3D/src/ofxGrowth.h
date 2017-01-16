@@ -13,6 +13,7 @@ public:
     void drawMeshes();
     void clearAll();
     
+    void colorMesh(int coloring_type);
     void addMesh(ofPolyline poly, int level);
     
     void setupBranch();
