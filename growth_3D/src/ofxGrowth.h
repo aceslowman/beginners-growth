@@ -8,14 +8,18 @@ public:
     
     void setup();
     void update();
-    void drawPath();
+    void drawPaths();
+    void drawPoints();
     void clearAll();
+    
+    void addMesh(ofPolyline poly);
     
     void setupBranch();
     void generateBranch(ofVec3f origin, ofVec3f initial_vector, int level);
     
     float   density;
     float   length;
+    float   scale;
     int     segments;
     int     depth;
     int     leaf_level;
@@ -24,6 +28,6 @@ public:
 
     float f_dim;
     
-    ofMesh branch;
+    vector< vector<ofMesh> > branches;
     vector<ofMesh> leaves;
 };
