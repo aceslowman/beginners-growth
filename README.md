@@ -74,14 +74,15 @@ class Growth : public ofMesh {
     void update();
     void draw();
 
+    void generateBranch(ofVec3f origin, ofVec3f initial_vector, int level);
+    void setupBranch();
+
     float density;
     float length;
     int   segments;
     int   depth;
     int   leaf_level;
     float straightness;
-
-    //other growth factors
 
     float f_dim; //diminishment factor, size of growth in subsequent levels
 
@@ -186,6 +187,42 @@ void Growth::generateBranch(ofVec3f origin, ofVec3f initial_vector, int level){
 }
 ```
 
+## setupBranch()
+
+I need some kind of controller for the recursion. Maybe there is a more efficient method that I could use to get some sort of self-contained function for generateBranch, but setupBranch() will work as that for now.
+
+setupBranch() will call to generateBranch, within loops. Essentially, loop through every existing branch, and use probability to choose which branches will beget new branches.
+
+First, begin looping through the first level.
+Then, loop through every node in that branch.
+If the odds are that the current node is selected, generate a new branch.
+
+How do I target individual branches, in the same way I did for ofPath?
+
+```
+void Growth::setupBranch(){
+  int current_branch = 1;
+  int current_level  = 1;
+
+  for(int i = 0; i <= this->depth; i++){ // loop a level
+    for(int j = 0; j < current_branch; j++){  // loop through each node
+      for(EACH NODE IN THIS BRANCH){
+        if(ofRandomuf() < this->density){ //introduce probability
+          generateBranch(THIS CURRENT NODE, initial_vector.rotate(ofRandomf()*360, initial_vector), current_level);
+        }
+      }
+      current_branch++;
+    }
+    current_level++;
+  }
+}
+```
+
+## The issue with ofMesh creation, instead of ofPath
+
+I am starting to question creating the mesh throughout the process. I think that this might be a misunderstanding of the purpose of ofPath and ofMesh individually, but if I was to use ofPath, with meticulously managed indices and hierarchies, THEN, create a seperate set of methods to handle meshing the paths, with it's own level logic and attention to depth.
+
+I think this actually might be better, now that I'm seeing that the use of ofMesh won't really allow me to say, loop through all individual branches seperately. There just wouldn't be the logic present in the mesh.
 ---
 
   ![Screenshot](../images/basic-sequence.png?raw=true)
