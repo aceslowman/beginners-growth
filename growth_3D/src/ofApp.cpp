@@ -36,8 +36,9 @@ void ofApp::draw(){
     ofSetColor(ofColor(0));
     
     cam.begin();
-        growth.drawPaths();
-        growth.drawPoints();
+//        growth.drawPaths();
+//        growth.drawPoints();
+        growth.drawMeshes();
     cam.end();
     
     ofDisableAntiAliasing();

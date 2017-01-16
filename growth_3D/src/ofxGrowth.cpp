@@ -16,26 +16,30 @@ void Growth::setup(){
     this->setFilled(false);
     this->setStrokeWidth(1);
     
+    branches.resize(this->depth);
+    
     setupBranch();
 }
 
 //--------------------------------------------------------------
-void Growth::addMesh(ofPolyline poly){
+void Growth::addMesh(ofPolyline poly, int level){
     /*
      I want to create a vector of meshes for each level, making branches
      organized as
      
      branches[level][branch_id]
      
-     so, first I need to create a mesh using the recently created branch.
-     how do I get that branch right here?
-     let's create an addMesh() method
-     well that becomes an issue. I have to generate branches off of previous
-     branch nodes. What I should do is use getOutline()
+     
+     right now the problem is with creating that initial level (which needs to be created and entered
+     immediately after the first generateBranch...)
      */
+
+    ofMesh t_mesh;
+//    t_mesh.setMode(OF_PRIMITIVE_POINTS);
+    t_mesh.setMode(OF_PRIMITIVE_LINE_STRIP);
+    t_mesh.addVertices(poly.getVertices());
     
-    
-//    branches[i][j].push_back();
+    branches[level].push_back(t_mesh);
 }
 
 //--------------------------------------------------------------
@@ -43,6 +47,8 @@ void Growth::setupBranch(){
     ofVec3f initial_vector = ofVec3f(ofRandomf(),ofRandomf(),ofRandomf());
     
     generateBranch(this->origin, initial_vector, 0);
+    
+    addMesh(this->getOutline()[0],0);
     
     int branch_count  = 1;
     
@@ -58,10 +64,10 @@ void Growth::setupBranch(){
                     generateBranch(current_node_position, t_vec, current_level);
                 }
             }
+            addMesh(this->getOutline()[current_branch],current_level);
+            
         }
-        
         branch_count = this->getOutline().size();
-//        addMesh(this->getOutline()[branch_count]);
     }
 }
 
@@ -101,9 +107,14 @@ void Growth::drawPaths(){
 
 //--------------------------------------------------------------
 void Growth::drawPoints(){
-    for(int i = 0; i < this->getOutline().size(); i++){ // for each branch...
-        for(int j = 0; j < this->getOutline()[i].size(); j++){ // for each node...
-            
+
+}
+
+//--------------------------------------------------------------
+void Growth::drawMeshes(){
+    for(int i = 0; i < branches.size(); i++){
+        for(int j = 0; j < branches[i].size(); j++){
+            branches[i][j].draw();
         }
     }
 }

@@ -10,9 +10,10 @@ public:
     void update();
     void drawPaths();
     void drawPoints();
+    void drawMeshes();
     void clearAll();
     
-    void addMesh(ofPolyline poly);
+    void addMesh(ofPolyline poly, int level);
     
     void setupBranch();
     void generateBranch(ofVec3f origin, ofVec3f initial_vector, int level);
