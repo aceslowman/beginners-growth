@@ -2,13 +2,12 @@
 
 //--------------------------------------------------------------
 void Growth::setup(){
-    this->density      = ofRandomuf();
+    this->density      = 0.5;
     this->length       = 0.7;
-//    this->segments     = ofRandom(10);
-    this->segments     = 15;
-    this->depth        = ofRandom(10);
-    this->leaf_level   = ofRandom(10);
-    this->straightness = ofRandomuf();
+    this->segments     = 20;
+    this->depth        = 3;
+    this->leaf_level   = 3;
+    this->straightness = 0.5;
     this->origin       = ofVec3f(0,0,0);
     this->f_dim        = 0.5;
     
@@ -25,25 +24,25 @@ void Growth::setupBranch(){
     
     generateBranch(this->origin, initial_vector, 0);
     
-    int current_branch = 1;
-    int current_level  = 2;
+    int branch_count  = 1;
+    int current_level = 1;
     
-//    for(int i = 0; i <= this->depth; i++){
-//        
-//        for(int j = 0; j < current_branch; j++){
-//            
-//            for(int k = 0; k < this->getOutline()[i].size(); k++){
-//                ofVec3f current_node_position = this->getOutline()[i].getPointAtIndexInterpolated(k);
-//                ofVec3f t_vec = initial_vector.rotate(ofRandomf()*360, initial_vector);
-//                
-//                if(ofRandomuf() < this->density){
-//                    generateBranch(current_node_position, t_vec, current_level);
-//                }
-//            }
-//            current_branch++;
-//        }
-//        current_level++;
-//    }
+    for(int i = 0; i <= this->depth; i++){
+        
+        for(int j = 0; j < branch_count; j++){
+            
+            for(int k = 0; k < this->getOutline()[i].size(); k++){
+                ofVec3f current_node_position = this->getOutline()[i].getPointAtIndexInterpolated(k);
+                ofVec3f t_vec = initial_vector.rotate(ofRandomf()*360, initial_vector);
+                
+                if(ofRandomuf() < this->density){
+                    generateBranch(current_node_position, t_vec, current_level);
+                }
+            }
+            current_level++;
+        }
+        branch_count++;
+    }
 }
 
 //--------------------------------------------------------------
