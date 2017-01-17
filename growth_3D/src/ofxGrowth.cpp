@@ -3,7 +3,7 @@
 
 //--------------------------------------------------------------
 Growth::Growth(){
-    this->density      = 0.5;
+    this->density      = 0.2;
     this->length       = 0.7;
     this->scale        = 60;
     this->segments     = 20;
@@ -12,11 +12,8 @@ Growth::Growth(){
     this->straightness = 0.5;
     this->origin       = ofVec3f(0,0,0);
     this->f_dim        = 0.5;
-    this->color_mode   = 0;
-    
-    this->setStrokeColor(ofFloatColor(0));
-    this->setFilled(false);
-    this->setStrokeWidth(1);
+    this->color_mode   = 1;
+
     glPointSize(8);
 }
 
@@ -25,6 +22,7 @@ void Growth::setup(){
     branches.resize(this->depth);
     
     setupBranch();
+    
     colorMesh(this->color_mode);
 }
 
@@ -66,14 +64,19 @@ void Growth::colorMesh(int coloring_type){
 
 //--------------------------------------------------------------
 void Growth::addMesh(ofPolyline poly, int level){
-    /*
-     branches[level][branch_id]
-     */
-
     ofMesh t_mesh;
     t_mesh.setMode(OF_PRIMITIVE_LINE_STRIP);
     t_mesh.setupIndicesAuto();
     
+    vector<ofIndexType> indices(poly.getVertices().size());
+
+    int acc = 0;
+    for(vector<ofIndexType>::iterator it = indices.begin(); it != indices.end(); ++it){
+        *it = acc;
+        ++acc;
+    }
+    
+    t_mesh.addIndices(indices);
     t_mesh.addVertices(poly.getVertices());
     
     branches[level].push_back(t_mesh);
@@ -85,31 +88,32 @@ void Growth::setupBranch(){
     
     generateBranch(this->origin, initial_vector, 0);
     
-    addMesh(this->getOutline()[0],0);
-    
-    int branch_count  = 1;
-    
-    for(int current_level = 1; current_level < this->depth; current_level++){
-        for(int current_branch = 0; current_branch < branch_count; current_branch++){ //for however many branches are currently there
-
-            for(int current_node = 0; current_node < this->getOutline()[current_branch].size(); current_node++){
+    for(int current_level = 0; current_level < this->depth-1; current_level++){
+        
+        for(int current_branch = 0; current_branch < branches[current_level].size(); current_branch++){
+            
+            for(int current_node = 0; current_node < branches[current_level][current_branch].getVertices().size(); current_node++){
                 
-                ofVec3f current_node_position = this->getOutline()[current_branch].getPointAtIndexInterpolated(current_node);
+                ofVec3f current_node_position = branches[current_level][current_branch].getVertex(current_node);
+                
                 ofVec3f t_vec = initial_vector.rotate(ofRandomf()*360, initial_vector);
                 
                 if(ofRandomuf() < this->density){
-                    generateBranch(current_node_position, t_vec, current_level);
+                    generateBranch(current_node_position, t_vec, current_level+1);
                 }
             }
-            addMesh(this->getOutline()[current_branch],current_level);
         }
-        branch_count = this->getOutline().size();
     }
 }
 
 //--------------------------------------------------------------
 void Growth::generateBranch(ofVec3f origin, ofVec3f initial_vector, int level){
-    this->moveTo(origin);
+    ofMesh t_branch;
+    t_branch.setMode(OF_PRIMITIVE_LINE_STRIP);
+    t_branch.setupIndicesAuto();
+    
+    t_branch.addIndex(0);
+    t_branch.addVertex(origin);
     
     //Diminish parameters
     int t_segments = this->segments * pow(this->f_dim,level);
@@ -120,11 +124,12 @@ void Growth::generateBranch(ofVec3f origin, ofVec3f initial_vector, int level){
     ofVec3f t_point = origin;
     
     //begin assembling one cycle of sequence
-    for(int i = 0; i < t_segments; i++){
+    for(int i = 1; i < t_segments; i++){
         
         t_point = t_point + (t_vec * ( t_length * ofRandomuf() ) );
         
-        this->lineTo(t_point);
+        t_branch.addIndex(i);
+        t_branch.addVertex(t_point);
         
         t_vec = ofVec3f(
             ofClamp(t_vec.x + (ofRandomf() * straightness),-1.0,1.0),
@@ -133,12 +138,7 @@ void Growth::generateBranch(ofVec3f origin, ofVec3f initial_vector, int level){
         );
     }
     
-    this->newSubPath();
-}
-
-//--------------------------------------------------------------
-void Growth::drawPaths(){
-    this->draw();
+    branches[level].push_back(t_branch);
 }
 
 //--------------------------------------------------------------
@@ -167,13 +167,28 @@ void Growth::drawLeaves(){
         for(int j = 0; j < branches[i].size(); j++){
             branches[i][j].setMode(OF_PRIMITIVE_TRIANGLE_FAN);
             branches[i][j].draw();
+            // j continues to be nothing?
+        }
+    }
+}
+
+//--------------------------------------------------------------
+void Growth::drawDebug(){
+    for(int i = 0; i < branches.size(); i++){
+        for(int j = 0; j < branches[i].size(); j++){
+            for(int k = 0; k < branches[i][j].getVertices().size(); k++){
+                ofPushMatrix();
+                ofTranslate(branches[i][j].getVertices()[k]);
+                int t_ind = branches[i][j].getIndices()[k];
+                ofDrawBitmapString("ID:"+ofToString(t_ind)+" L:"+ofToString(i),0,0);
+                ofPopMatrix();
+            }
         }
     }
 }
 
 //--------------------------------------------------------------
 void Growth::clearAll(){
-    this->clear();
     branches.clear();
 }
 

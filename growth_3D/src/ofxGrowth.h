@@ -2,16 +2,17 @@
 
 #include "ofMain.h"
 
-class Growth : public ofPath {
+class Growth {
 
 public:
     
     void setup();
     void update();
-    void drawPaths();
+//    void drawPaths();
     void drawPoints();
     void drawMeshes();
     void drawLeaves();
+    void drawDebug();
     void clearAll();
     
     void setDensity(float density);
@@ -30,6 +31,9 @@ public:
     
     float f_dim;
     
+    /*
+     branches[level][branch_id]
+     */
     vector< vector<ofMesh> > branches;
     
     Growth();
