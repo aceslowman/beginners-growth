@@ -5,11 +5,11 @@ void ofApp::setup(){
     glCullFace(GL_BACK);
     ofSetVerticalSync(true);
     
-    growth_group.add(growth_density.set("Density",0.0,0.0,1.0));
-    growth_group.add(growth_length.set("Length",0.0,0.0,1.0));
-    growth_group.add(growth_straightness.set("Straightness",0.0,0.0,1.0));
+    growth_group.add(growth_density.set("Density",0.5,0.0,1.0));
+    growth_group.add(growth_length.set("Length",0.5,0.0,1.0));
+    growth_group.add(growth_straightness.set("Straightness",0.5,0.0,1.0));
     growth_group.add(growth_segments.set("Segments",15,0,30));
-    growth_group.add(growth_depth.set("Depth",2,1,10));
+    growth_group.add(growth_depth.set("Depth",4,1,10));
 
     gui.setup();
     gui.add(growth_group);
@@ -19,11 +19,11 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    growth.density      = growth_density;
-    growth.length       = growth_length;
-    growth.segments     = growth_segments;
-    growth.depth        = growth_depth;
-    growth.straightness = growth_straightness;
+    growth.setDensity(growth_density);
+    growth.setLength(growth_length);
+    growth.setSegments(growth_segments);
+    growth.setDepth(growth_depth);
+    growth.setStraightness(growth_straightness);
 }
 
 //--------------------------------------------------------------
@@ -50,6 +50,7 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
     if(key == 'b'){
+        growth.clearAll();
         growth.setup();
     }
     if(key == 'c'){
@@ -57,6 +58,12 @@ void ofApp::keyPressed(int key){
     }
     if(key == 'd'){
         debug = !debug;
+    }
+    if(key == '1'){
+        growth.colorMesh(0);
+    }
+    if(key == '2'){
+        growth.colorMesh(1);
     }
 }
 

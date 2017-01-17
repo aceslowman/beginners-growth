@@ -1,7 +1,8 @@
 #include "ofxGrowth.h"
 
+
 //--------------------------------------------------------------
-void Growth::setup(){
+Growth::Growth(){
     this->density      = 0.5;
     this->length       = 0.7;
     this->scale        = 60;
@@ -11,15 +12,19 @@ void Growth::setup(){
     this->straightness = 0.5;
     this->origin       = ofVec3f(0,0,0);
     this->f_dim        = 0.5;
+    this->color_mode   = 0;
     
     this->setStrokeColor(ofFloatColor(0));
     this->setFilled(false);
     this->setStrokeWidth(1);
-    
+}
+
+//--------------------------------------------------------------
+void Growth::setup(){
     branches.resize(this->depth);
     
     setupBranch();
-    colorMesh(0);
+    colorMesh(this->color_mode);
 }
 
 //--------------------------------------------------------------
@@ -28,13 +33,11 @@ void Growth::colorMesh(int coloring_type){
         case 0: //color for each branch
             
             for(int i = 0; i < branches.size(); i++){
-                ofFloatColor branch_color = ofFloatColor(ofRandomuf(),ofRandomuf(),ofRandomuf());
-                
                 for(int j = 0; j < branches[i].size(); j++){
-                    vector<ofIndexType> t_ind = branches[i][j].getIndices();
+                    ofFloatColor branch_color = ofFloatColor(ofRandomuf(),ofRandomuf(),ofRandomuf());
+                    
                     branches[i][j].addColors(&branch_color, branches[i][j].getVertices().size());
                     for(int k = 0; k < branches[i][j].getVertices().size(); k++){
-                        
                         branches[i][j].setColor(k, branch_color);
                     }
                 }
@@ -43,6 +46,16 @@ void Growth::colorMesh(int coloring_type){
             break;
             
         case 1: //color for each level
+            for(int i = 0; i < branches.size(); i++){
+                ofFloatColor branch_color = ofFloatColor(ofRandomuf(),ofRandomuf(),ofRandomuf());
+                
+                for(int j = 0; j < branches[i].size(); j++){
+                    branches[i][j].addColors(&branch_color, branches[i][j].getVertices().size());
+                    for(int k = 0; k < branches[i][j].getVertices().size(); k++){
+                        branches[i][j].setColor(k, branch_color);
+                    }
+                }
+            }
             
             break;
         default:
@@ -53,9 +66,6 @@ void Growth::colorMesh(int coloring_type){
 //--------------------------------------------------------------
 void Growth::addMesh(ofPolyline poly, int level){
     /*
-     I want to create a vector of meshes for each level, making branches
-     organized as
-     
      branches[level][branch_id]
      */
 
@@ -157,3 +167,11 @@ void Growth::clearAll(){
     this->clear();
     branches.clear();
 }
+
+void Growth::setDensity(float density){this->density = density;}
+void Growth::setLength(float length){this->length = length;}
+void Growth::setScale(float scale){this->scale = scale;}
+void Growth::setSegments(int segments){this->segments = segments;}
+void Growth::setDepth(int depth){this->depth = depth;}
+void Growth::setStraightness(float straightness){this->straightness = straightness;}
+void Growth::setColormode(int color_mode){this->color_mode = color_mode;}
