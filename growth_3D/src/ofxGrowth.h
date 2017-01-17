@@ -11,6 +11,7 @@ public:
     void drawPaths();
     void drawPoints();
     void drawMeshes();
+    void drawLeaves();
     void clearAll();
     
     void setDensity(float density);
@@ -27,12 +28,9 @@ public:
     void setupBranch();
     void generateBranch(ofVec3f origin, ofVec3f initial_vector, int level);
     
-
-
     float f_dim;
     
     vector< vector<ofMesh> > branches;
-    vector<ofMesh> leaves;
     
     Growth();
     

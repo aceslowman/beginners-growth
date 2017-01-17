@@ -7,9 +7,14 @@ Before I begin exploring L-Systems, I want to see if I can mimic plant growth si
 
 ## Sequence
 
-1. First, draw a line from one point, to a random point. The random point is constrained by the random point vector that came before it. (repeat n times)
-2. Once one branch is drawn, loop through points along the branch, and create new branches from random points.
-3. Once n number of levels have been looped through, change the drawing mode (i.e points to triangle strip)
+1. Draw a line from a starting point, to a destination point. The destination point is constrained to a certain degree to the direction and magnitude of the vector before it.
+  * *repeat n times, until a branch is created*
+2. Loop through the points of all branches, and at semi-random points, generate new branches
+  * *repeat n levels deep*
+  * For each new branch, create a corresponding mesh for display.
+3. Loop through all created branches
+  * Apply coloring
+  * Change drawing mode to TRIANGLE_FAN for all branches belonging to levels above the LEAF_LEVEL
 
 ---
 

@@ -17,6 +17,7 @@ Growth::Growth(){
     this->setStrokeColor(ofFloatColor(0));
     this->setFilled(false);
     this->setStrokeWidth(1);
+    glPointSize(8);
 }
 
 //--------------------------------------------------------------
@@ -75,7 +76,6 @@ void Growth::addMesh(ofPolyline poly, int level){
     
     t_mesh.addVertices(poly.getVertices());
     
-    
     branches[level].push_back(t_mesh);
 }
 
@@ -102,7 +102,6 @@ void Growth::setupBranch(){
                 }
             }
             addMesh(this->getOutline()[current_branch],current_level);
-            
         }
         branch_count = this->getOutline().size();
     }
@@ -147,7 +146,6 @@ void Growth::drawPoints(){
     for(int i = 0; i < branches.size(); i++){
         for(int j = 0; j < branches[i].size(); j++){
             branches[i][j].setMode(OF_PRIMITIVE_POINTS);
-            branches[i][j].setMode(OF_PRIMITIVE_POINTS);
             branches[i][j].draw();
         }
     }
@@ -157,6 +155,17 @@ void Growth::drawPoints(){
 void Growth::drawMeshes(){
     for(int i = 0; i < branches.size(); i++){
         for(int j = 0; j < branches[i].size(); j++){
+            branches[i][j].setMode(OF_PRIMITIVE_LINE_STRIP);
+            branches[i][j].draw();
+        }
+    }
+}
+
+//--------------------------------------------------------------
+void Growth::drawLeaves(){
+    for(int i = this->leaf_level; i < branches.size(); i++){
+        for(int j = 0; j < branches[i].size(); j++){
+            branches[i][j].setMode(OF_PRIMITIVE_TRIANGLE_FAN);
             branches[i][j].draw();
         }
     }

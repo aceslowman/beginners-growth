@@ -39,6 +39,7 @@ void ofApp::draw(){
 //        growth.drawPaths();
 //        growth.drawPoints();
         growth.drawMeshes();
+        growth.drawLeaves();
     cam.end();
     
     ofDisableAntiAliasing();
