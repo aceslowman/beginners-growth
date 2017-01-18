@@ -118,22 +118,36 @@ void Growth::generateBranch(ofVec3f origin, ofVec3f initial_vector, int level){
     t_branch.addVertex(origin);
     
     //Diminish parameters
-//    int t_segments = this->segments * pow(this->f_dim,level);
+    
+    /*
+     bears less leaves
+        int t_segments = this->segments * pow(this->f_dim,level);
+    */
+    
     int t_segments = this->segments;
     float t_length = (this->length * this->scale) * pow(this->f_dim,level);
     
     //Initialize vector and point
     ofVec3f t_vec = initial_vector;
     ofVec3f t_point = origin;
+    ofVec3f t_point_mirror = origin;
     
     //begin assembling one cycle of sequence
     for(int i = 1; i < t_segments; i++){
-        
-        t_point = t_point + (t_vec * ( t_length * ofRandomuf() ) );
+        float t_length_rand = ( t_length * ofRandomuf() );
+        t_point = t_point + (t_vec *  t_length_rand);
         
         t_branch.addIndex(i);
         t_branch.addColor(ofFloatColor(0));
         t_branch.addVertex(t_point);
+        
+        if(level >= this->leaf_level){
+            t_point_mirror = t_point_mirror + (ofVec3f(-t_point.x,t_point.y,t_point.z) * t_length_rand);
+            
+            t_branch.addIndex(i);
+            t_branch.addColor(ofFloatColor(0));
+            t_branch.addVertex(t_point_mirror.getRotated(20.0, origin, t_vec));
+        }
         
         t_vec = ofVec3f(
             ofClamp(t_vec.x + (ofRandomf() * straightness),-1.0,1.0),
@@ -157,7 +171,7 @@ void Growth::drawPoints(){
 
 //--------------------------------------------------------------
 void Growth::drawMeshes(){
-    for(int i = 0; i < this->leaf_level; i++){
+    for(int i = 0; i < branches.size(); i++){
         for(int j = 0; j < branches[i].size(); j++){
             branches[i][j].draw();
         }
