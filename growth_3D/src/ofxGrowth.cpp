@@ -6,13 +6,13 @@ Growth::Growth(){
     this->density      = 0.2;
     this->length       = 0.7;
     this->scale        = 60;
-    this->segments     = 20;
+    this->segments     = 35;
     this->depth        = 4;
     this->leaf_level   = 3;
     this->straightness = 0.5;
     this->origin       = ofVec3f(0,0,0);
     this->f_dim        = 0.5;
-    this->color_mode   = 1;
+    this->color_mode   = 0;
 
     glPointSize(8);
 }
@@ -57,29 +57,31 @@ void Growth::colorMesh(int coloring_type){
             }
             
             break;
+            
+        case 2: //all black branches, random colored leaves
+            for(int i = 0; i < branches.size(); i++){
+                
+
+                if(i < this->leaf_level){
+                    for(int j = 0; j < branches[i].size(); j++){
+                        for(int k = 0; k < branches[i][j].getVertices().size(); k++){
+                            branches[i][j].setColor(k, ofFloatColor(0));
+                        }
+                    }
+                }else{
+                    ofFloatColor branch_color = ofFloatColor(ofRandomuf(),ofRandomuf(),ofRandomuf());
+                    for(int j = 0; j < branches[i].size(); j++){
+                        for(int k = 0; k < branches[i][j].getVertices().size(); k++){
+                            branches[i][j].setColor(k, branch_color);
+                        }
+                    }
+                }
+            }
+            
+            break;
         default:
             break;
     }
-}
-
-//--------------------------------------------------------------
-void Growth::addMesh(ofPolyline poly, int level){
-    ofMesh t_mesh;
-    t_mesh.setMode(OF_PRIMITIVE_LINE_STRIP);
-    t_mesh.setupIndicesAuto();
-    
-    vector<ofIndexType> indices(poly.getVertices().size());
-
-    int acc = 0;
-    for(vector<ofIndexType>::iterator it = indices.begin(); it != indices.end(); ++it){
-        *it = acc;
-        ++acc;
-    }
-    
-    t_mesh.addIndices(indices);
-    t_mesh.addVertices(poly.getVertices());
-    
-    branches[level].push_back(t_mesh);
 }
 
 //--------------------------------------------------------------
@@ -116,7 +118,8 @@ void Growth::generateBranch(ofVec3f origin, ofVec3f initial_vector, int level){
     t_branch.addVertex(origin);
     
     //Diminish parameters
-    int t_segments = this->segments * pow(this->f_dim,level);
+//    int t_segments = this->segments * pow(this->f_dim,level);
+    int t_segments = this->segments;
     float t_length = (this->length * this->scale) * pow(this->f_dim,level);
     
     //Initialize vector and point
@@ -129,6 +132,7 @@ void Growth::generateBranch(ofVec3f origin, ofVec3f initial_vector, int level){
         t_point = t_point + (t_vec * ( t_length * ofRandomuf() ) );
         
         t_branch.addIndex(i);
+        t_branch.addColor(ofFloatColor(0));
         t_branch.addVertex(t_point);
         
         t_vec = ofVec3f(
@@ -153,9 +157,8 @@ void Growth::drawPoints(){
 
 //--------------------------------------------------------------
 void Growth::drawMeshes(){
-    for(int i = 0; i < branches.size(); i++){
+    for(int i = 0; i < this->leaf_level; i++){
         for(int j = 0; j < branches[i].size(); j++){
-            branches[i][j].setMode(OF_PRIMITIVE_LINE_STRIP);
             branches[i][j].draw();
         }
     }
@@ -167,7 +170,6 @@ void Growth::drawLeaves(){
         for(int j = 0; j < branches[i].size(); j++){
             branches[i][j].setMode(OF_PRIMITIVE_TRIANGLE_FAN);
             branches[i][j].draw();
-            // j continues to be nothing?
         }
     }
 }

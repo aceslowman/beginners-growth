@@ -36,7 +36,7 @@ void ofApp::draw(){
     ofSetColor(ofColor(0));
     
     cam.begin();
-//        growth.drawMeshes();
+        growth.drawMeshes();
         growth.drawLeaves();
         if(debug)
             growth.drawDebug();
@@ -60,12 +60,13 @@ void ofApp::keyPressed(int key){
     if(key == 'd'){
         debug = !debug;
     }
-    if(key == '1'){
+    
+    if(key == '1')
         growth.colorMesh(0);
-    }
-    if(key == '2'){
+    if(key == '2')
         growth.colorMesh(1);
-    }
+    if(key == '3')
+        growth.colorMesh(2);
 }
 
 //--------------------------------------------------------------
