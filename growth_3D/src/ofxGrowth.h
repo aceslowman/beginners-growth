@@ -27,8 +27,8 @@ public:
     
     void setupBranches();
     void setupLeaves();
-    void generateBranch(ofVec3f origin, ofVec3f initial_vector, int level);
-    void generateLeaf(ofPolyline poly, int level);
+    ofMesh generateBranch(ofVec3f origin, ofVec3f initial_vector, int level);
+    ofMesh generateLeaf(ofPolyline poly, int level);
     
     Growth();
     

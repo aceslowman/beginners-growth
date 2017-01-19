@@ -20,8 +20,21 @@ Growth::Growth(){
 
 //--------------------------------------------------------------
 void Growth::setup(){
-    branches.resize(this->depth);
-    leaves.resize(this->depth);
+    /*
+        PLUS 1 hack below, because there is something that is poorly structured in the setupBranches() method.
+        Most likely having to do with the logic inherent behind
+            Create one initial branch and level
+            Loop through that level and branch, create new branches from it
+     
+        There is this kind of mismatch between current_level values. Does current_level refer to the level that I'm inserting?
+        Or is it more that current_level refers to the branch that I am looping through. It should be the latter.
+     
+        CURRENT_LEVEL refers to the level that is being looped through, and all branches generated are then pushed back into the
+        branches vector when the loop is over. This is a fix that I need to come back to eventually. For now, this fix:
+     */
+    
+//    branches.resize(this->depth);
+//    leaves.resize(this->depth);
     
     setupBranches();
     
@@ -88,34 +101,65 @@ void Growth::colorMesh(int coloring_type){
 
 //--------------------------------------------------------------
 void Growth::setupBranches(){
+    vector<ofMesh> t_branches, t_leaves;
+    
     ofVec3f initial_vector = this->growth_vector;
     
-    generateBranch(this->origin, initial_vector, 0);
+    ofMesh t_branch = generateBranch(this->origin, initial_vector, 0);
+    t_branches.push_back(t_branch);
+    branches.push_back(t_branches);
     
-    for(int current_level = 0; current_level < this->depth-1; current_level++){
+    for(int current_level = 0; current_level < this->depth; current_level++){
+        vector<ofMesh> t_branches;
+        
         for(int current_branch = 0; current_branch < branches[current_level].size(); current_branch++){
-            
-            //To generate new branches
+
             for(int current_node = 0; current_node < branches[current_level][current_branch].getVertices().size(); current_node++){
                 
                 ofVec3f current_node_position = branches[current_level][current_branch].getVertex(current_node);
                 ofVec3f t_vec = initial_vector.rotate(ofRandomf()*360, initial_vector);
                 
                 if(ofRandomuf() < this->density){
-                    generateBranch(current_node_position, t_vec, current_level+1);
+                    ofMesh t_branch = generateBranch(current_node_position, t_vec, current_level+1);
+                    t_branches.push_back(t_branch);
                 }
             }
-            
-            //To leaf a branch
-            if(current_level + 1 >= this->leaf_level){
-                generateLeaf(branches[current_level][current_branch].getVertices(),current_level);
-            }
         }
+        branches.push_back(t_branches);
     }
 }
 
+/*
+ 
+ ofVec3f initial_vector = this->growth_vector;
+ 
+ generateBranch(this->origin, initial_vector, 0);
+ 
+ for(int current_level = 0; current_level < this->depth-1; current_level++){
+ for(int current_branch = 0; current_branch < branches[current_level].size(); current_branch++){
+ 
+ //To generate new branches
+ for(int current_node = 0; current_node < branches[current_level][current_branch].getVertices().size(); current_node++){
+ 
+ ofVec3f current_node_position = branches[current_level][current_branch].getVertex(current_node);
+ ofVec3f t_vec = initial_vector.rotate(ofRandomf()*360, initial_vector);
+ 
+ if(ofRandomuf() < this->density){
+ generateBranch(current_node_position, t_vec, current_level+1);
+ }
+ }
+ 
+ //To leaf a branch
+ if(current_level >= this->leaf_level){
+ generateLeaf(branches[current_level][current_branch].getVertices(),current_level);
+ }
+ }
+ }
+ 
+ */
+
 //--------------------------------------------------------------
-void Growth::generateBranch(ofVec3f origin, ofVec3f initial_vector, int level){
+ofMesh Growth::generateBranch(ofVec3f origin, ofVec3f initial_vector, int level){
     ofMesh t_branch;
     t_branch.setMode(OF_PRIMITIVE_LINE_STRIP);
     t_branch.setupIndicesAuto();
@@ -148,11 +192,12 @@ void Growth::generateBranch(ofVec3f origin, ofVec3f initial_vector, int level){
         );
     }
     
-    branches[level].push_back(t_branch);
+//    branches[level].push_back(t_branch);
+    return t_branch;
 }
 
 //--------------------------------------------------------------
-void Growth::generateLeaf(ofPolyline poly, int level){
+ofMesh Growth::generateLeaf(ofPolyline poly, int level){
     ofPath t_path, t_path_mirrored;
     
     ofVec3f p1(poly[0]);
@@ -169,7 +214,6 @@ void Growth::generateLeaf(ofPolyline poly, int level){
     t_path.bezierTo(cp1,cp2,p2);
     
     leaves[level].push_back(t_path);
-
 }
 
 //--------------------------------------------------------------
