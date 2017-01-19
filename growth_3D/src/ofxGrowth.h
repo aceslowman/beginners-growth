@@ -19,20 +19,16 @@ public:
     void setScale(float scale);
     void setSegments(int segments);
     void setDepth(int depth);
-    void setStraightness(float straightness);
+    void setLeafLevel(int leaf_level);
+    void setCrookedness(float crookedness);
     void setColormode(int color_mode);
     
     void colorMesh(int coloring_type);
     
-    void setupBranch();
+    void setupBranches();
+    void setupLeaves();
     void generateBranch(ofVec3f origin, ofVec3f initial_vector, int level);
-    
-    float f_dim;
-    
-    /*
-     branches[level][branch_id]
-     */
-    vector< vector<ofMesh> > branches;
+    void generateLeaf(ofPolyline poly, int level);
     
     Growth();
     
@@ -44,7 +40,16 @@ private:
     int     segments;
     int     depth;
     int     leaf_level;
-    float   straightness;
+    float   crookedness;
     int     color_mode;
     ofVec3f origin;
+    ofVec3f growth_vector;
+    
+    float f_dim;
+    
+    /*
+     branches[level][branch_id]
+     */
+    vector< vector<ofMesh> > branches;
+    vector< vector<ofPath> > leaves;
 };

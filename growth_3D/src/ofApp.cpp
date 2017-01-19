@@ -7,9 +7,10 @@ void ofApp::setup(){
     
     growth_group.add(growth_density.set("Density",0.5,0.0,1.0));
     growth_group.add(growth_length.set("Length",0.5,0.0,1.0));
-    growth_group.add(growth_straightness.set("Straightness",0.5,0.0,1.0));
+    growth_group.add(growth_crookedness.set("Crookedness",0.5,0.0,1.0));
     growth_group.add(growth_segments.set("Segments",15,0,30));
     growth_group.add(growth_depth.set("Depth",4,1,10));
+    growth_group.add(growth_leaf_level.set("Leaf Level",3,1,10));
 
     gui.setup();
     gui.add(growth_group);
@@ -23,7 +24,8 @@ void ofApp::update(){
     growth.setLength(growth_length);
     growth.setSegments(growth_segments);
     growth.setDepth(growth_depth);
-    growth.setStraightness(growth_straightness);
+    growth.setCrookedness(growth_crookedness);
+    growth.setLeafLevel(growth_leaf_level);
 }
 
 //--------------------------------------------------------------
@@ -37,7 +39,8 @@ void ofApp::draw(){
     
     cam.begin();
         growth.drawMeshes();
-        growth.drawLeaves();
+        if(b_leaves)
+            growth.drawLeaves();
         if(debug)
             growth.drawDebug();
     cam.end();
@@ -60,13 +63,16 @@ void ofApp::keyPressed(int key){
     if(key == 'd'){
         debug = !debug;
     }
+    if(key == 'l'){
+        b_leaves = !b_leaves;
+    }
     
     if(key == '1')
-        growth.colorMesh(0);
+        growth.setColormode(0);
     if(key == '2')
-        growth.colorMesh(1);
+        growth.setColormode(1);
     if(key == '3')
-        growth.colorMesh(2);
+        growth.setColormode(2);
 }
 
 //--------------------------------------------------------------

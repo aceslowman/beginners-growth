@@ -21,6 +21,7 @@ class ofApp : public ofBaseApp{
 		void mouseExited(int x, int y);
     
     bool debug;
+    bool b_leaves;
 		
     ofEasyCam cam;
     
@@ -31,7 +32,8 @@ class ofApp : public ofBaseApp{
     ofParameter<float> growth_length;
     ofParameter<int>   growth_segments;
     ofParameter<int>   growth_depth;
-    ofParameter<float> growth_straightness;
+    ofParameter<int>   growth_leaf_level;
+    ofParameter<float> growth_crookedness;
 
     Growth growth;
 };

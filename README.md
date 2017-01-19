@@ -28,7 +28,7 @@ Before I begin exploring L-Systems, I want to see if I can mimic plant growth si
   * *How many bends does the branch have?*
 * **Depth (levels)**
   * *How deep does the recursion go?*
-* **Smoothness / Straightness**
+* **Crookedness**
   * *How constrained are the points on the branch to a particular vector?*
 * **Leaf Width**
   * *How wide is the leaf?*
