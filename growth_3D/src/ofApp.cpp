@@ -4,6 +4,11 @@
 void ofApp::setup(){
     glCullFace(GL_BACK);
     ofSetVerticalSync(true);
+    ofSetSmoothLighting(true);
+    
+    pointLight.setDiffuseColor( ofColor(0.f, 255.f, 255.f));
+    pointLight.setSpecularColor( ofColor(255.f, 255.f, 255.f));
+    pointLight.setPosition(0, 0, 0);
     
     growth_group.add(growth_density.set("Density",0.5,0.0,1.0));
     growth_group.add(growth_length.set("Length",0.5,0.0,1.0));
@@ -11,9 +16,13 @@ void ofApp::setup(){
     growth_group.add(growth_segments.set("Segments",15,0,30));
     growth_group.add(growth_depth.set("Depth",4,1,10));
     growth_group.add(growth_leaf_level.set("Leaf Level",3,1,10));
+    
+    light_group.add(light_color.set("Light Color",ofFloatColor(0,0,0),ofFloatColor(0,0,0),ofFloatColor(1,1,1)));
+    light_group.add(light_position.set("Light Position",ofVec3f(0,0,0), ofVec3f(-200,-200,-200), ofVec3f(200,200,200)));
 
     gui.setup();
     gui.add(growth_group);
+    gui.add(light_group);
     
     growth.setup();
 }
@@ -26,10 +35,14 @@ void ofApp::update(){
     growth.setDepth(growth_depth);
     growth.setCrookedness(growth_crookedness);
     growth.setLeafLevel(growth_leaf_level);
+    
+    pointLight.setPosition(light_position);
+    pointLight.setDiffuseColor(light_color);
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    ofEnableLighting();
     ofEnableAntiAliasing();
     ofEnableSmoothing();
     ofEnableDepthTest();
@@ -38,6 +51,8 @@ void ofApp::draw(){
     ofSetColor(ofColor(0));
     
     cam.begin();
+        pointLight.enable();
+    
         growth.drawMeshes();
         if(b_leaves)
             growth.drawLeaves();
@@ -47,6 +62,7 @@ void ofApp::draw(){
     
     ofDisableAntiAliasing();
     ofDisableDepthTest();
+    ofDisableLighting();
     
     gui.draw();
 }
@@ -87,7 +103,7 @@ void ofApp::mouseMoved(int x, int y ){
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-
+    
 }
 
 //--------------------------------------------------------------

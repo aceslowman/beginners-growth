@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/ofxGrowth.cpp"
-            timestampString = "506558353.409014"
+            timestampString = "506563305.306671"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
+            startingLineNumber = "23"
+            endingLineNumber = "23"
             landmarkName = "Growth::setup()"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,12 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/ofxGrowth.cpp"
-            timestampString = "506559161.308134"
+            timestampString = "506580616.56346"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "128"
-            endingLineNumber = "128"
-            landmarkName = "Growth::setupBranches()"
+            startingLineNumber = "98"
+            endingLineNumber = "98"
+            landmarkName = "Growth::colorMesh(int coloring_type)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -42,45 +42,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/ofxGrowth.cpp"
-            timestampString = "506559161.308134"
+            timestampString = "506580616.56346"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "129"
-            endingLineNumber = "129"
-            landmarkName = "Growth::setupBranches()"
+            startingLineNumber = "94"
+            endingLineNumber = "94"
+            landmarkName = "Growth::colorMesh(int coloring_type)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Growth::setupBranches()"
-                  moduleName = "growth_3DDebug"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/austin/Documents/of_v0.9.8_osx_release/apps/beginners-growth/growth_3D/src/ofxGrowth.cpp"
-                  timestampString = "506558660.860621"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "129"
-                  endingLineNumber = "129"
-                  offsetFromSymbolStart = "1064">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Growth::setupBranches()"
-                  moduleName = "growth_3DDebug"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/austin/Documents/of_v0.9.8_osx_release/apps/beginners-growth/growth_3D/src/ofxGrowth.cpp"
-                  timestampString = "506558660.863445"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "129"
-                  endingLineNumber = "129"
-                  offsetFromSymbolStart = "1139">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

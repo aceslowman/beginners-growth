@@ -24,9 +24,11 @@ class ofApp : public ofBaseApp{
     bool b_leaves;
 		
     ofEasyCam cam;
+    ofLight pointLight;
     
     ofxPanel gui;
     ofParameterGroup growth_group;
+    ofParameterGroup light_group;
     
     ofParameter<float> growth_density;
     ofParameter<float> growth_length;
@@ -34,6 +36,9 @@ class ofApp : public ofBaseApp{
     ofParameter<int>   growth_depth;
     ofParameter<int>   growth_leaf_level;
     ofParameter<float> growth_crookedness;
+    
+    ofParameter<ofFloatColor> light_color;
+    ofParameter<ofVec3f> light_position;
 
     Growth growth;
 };
