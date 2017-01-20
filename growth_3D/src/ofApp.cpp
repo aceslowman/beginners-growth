@@ -47,7 +47,7 @@ void ofApp::draw(){
     ofEnableSmoothing();
     ofEnableDepthTest();
     
-    ofSetBackgroundColor(ofFloatColor(1));
+    ofSetBackgroundColor(ofFloatColor(0));
     ofSetColor(ofColor(0));
     
     cam.begin();
@@ -58,6 +58,9 @@ void ofApp::draw(){
             growth.drawLeaves();
         if(debug)
             growth.drawDebug();
+    
+        ofSetColor(ofFloatColor(1));
+        ofDrawSphere(pointLight.getPosition(), 5);
     cam.end();
     
     ofDisableAntiAliasing();

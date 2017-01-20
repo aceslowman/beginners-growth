@@ -219,34 +219,6 @@ ofPath Growth::generateLeaf(ofPolyline poly, int level){
     
     return t_path;
 }
-//
-////--------------------------------------------------------------
-//ofPath Growth::generateLeaf(ofPolyline poly, int level){
-//    ofMesh t_leaf;
-//    ofPath t_path, t_path_mirrored;
-//    
-//    ofVec3f p1(poly[0]);
-//    ofVec3f p2(poly[poly.size()-1]);
-//    
-//    ofVec3f t_vec(p2 - p1);
-//    ofVec3f t_vec_ortho(ofRandomf(),ofRandomf(),ofRandomf());
-//    t_vec_ortho.cross(t_vec.normalize());
-//    
-//    ofVec3f cp1(p1 - (t_vec_ortho*15));
-//    ofVec3f cp2(p2 - (t_vec_ortho*15));
-//    ofVec3f cp3(p1 + (t_vec_ortho*15));
-//    ofVec3f cp4(p2 + (t_vec_ortho*15));
-//    
-//    t_path.moveTo(poly[0]);
-//    t_path.bezierTo(cp1,cp2,p2);
-//    
-//    t_path_mirrored.moveTo(poly[0]);
-//    t_path_mirrored.bezierTo(cp3,cp4,p2);
-//    
-//    t_path.append(t_path_mirrored);
-//    
-//    return t_path;
-//}
 
 //--------------------------------------------------------------
 void Growth::drawPoints(){
@@ -261,7 +233,11 @@ void Growth::drawPoints(){
 //--------------------------------------------------------------
 void Growth::drawMeshes(){
     for(int i = 0; i < branches.size(); i++){
+        //for each level, set the thickness to a diminishing value
+        float t_width = (10) * pow(this->f_dim,i);
+        
         for(int j = 0; j < branches[i].size(); j++){
+            glLineWidth(t_width);
             branches[i][j].setMode(OF_PRIMITIVE_LINE_STRIP);
             branches[i][j].draw();
         }
