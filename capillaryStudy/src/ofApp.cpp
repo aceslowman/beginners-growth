@@ -39,7 +39,7 @@ void ofApp::update(){
     pointLight.setPosition(light_position);
     pointLight.setDiffuseColor(light_color);
     
-    animateCapillaries();
+    //capillary.animateCapillary();
 }
 
 //--------------------------------------------------------------
@@ -67,11 +67,6 @@ void ofApp::draw(){
     
     syphon.publishScreen();
     gui.draw();
-}
-
-//--------------------------------------------------------------
-void ofApp::animateCapillaries(){
-    
 }
 
 //--------------------------------------------------------------
