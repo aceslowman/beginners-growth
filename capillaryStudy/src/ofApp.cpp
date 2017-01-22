@@ -38,22 +38,23 @@ void ofApp::update(){
     
     pointLight.setPosition(light_position);
     pointLight.setDiffuseColor(light_color);
-    
-    //capillary.animateCapillary();
+
+    capillary.animateCapillary();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofEnableLighting();
+//    ofEnableLighting();
     ofEnableAntiAliasing();
     ofEnableSmoothing();
     ofEnableDepthTest();
+    ofEnableAlphaBlending();
     
     ofSetBackgroundColor(ofFloatColor(0));
     ofSetColor(ofColor(0));
     
     cam.begin();
-    pointLight.enable();
+//    pointLight.enable();
     
     capillary.drawMeshes();
     
@@ -63,10 +64,11 @@ void ofApp::draw(){
     
     ofDisableAntiAliasing();
     ofDisableDepthTest();
-    ofDisableLighting();
+//    ofDisableLighting();
     
     syphon.publishScreen();
     gui.draw();
+    ofDrawBitmapString(capillary.getNodeSize(),110, 100);
 }
 
 //--------------------------------------------------------------

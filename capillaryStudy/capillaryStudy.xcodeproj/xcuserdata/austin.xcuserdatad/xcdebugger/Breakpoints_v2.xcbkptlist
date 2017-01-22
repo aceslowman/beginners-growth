@@ -10,13 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../../addons/ofxGrowth/src/ofxGrowth.cpp"
-            timestampString = "506676802.875638"
+            timestampString = "506749833.486272"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "292"
-            endingLineNumber = "292"
-            landmarkName = "ofxGrowth::updateNodeSize()"
-            landmarkType = "7">
+            startingLineNumber = "306"
+            endingLineNumber = "306">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

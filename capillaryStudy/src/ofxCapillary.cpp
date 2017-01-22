@@ -7,6 +7,16 @@ ofxCapillary::ofxCapillary(){
 }
 
 //--------------------------------------------------------------
+void ofxCapillary::setup(){
+    ofxGrowth::setup();
+    setColormode(3);
+    
+    this->level = 0;
+    this->branch = 0;
+    this->node = 1;
+}
+
+//--------------------------------------------------------------
 void ofxCapillary::animateCapillary(){
     /*
         Animate a moving particle, either filling up, or just traveling along the growth pattern.
@@ -15,18 +25,31 @@ void ofxCapillary::animateCapillary(){
         Right at the beginning, calculate full number of nodes
      */
     
-    int t_driver = ofGetElapsedTimeMillis();
-    
-    ofWrap(t_driver,0,getNodeSize());
-    ofLog(OF_LOG_NOTICE,ofToString(t_driver));
-    
-    
-//    for(int current_level = 0; current_level < branches.size(); current_level++){
-//        for(int current_branch = 0; current_branch < branches[current_level].size(); current_branch++){
-//            for(int current_node = 0; branches[current_level][current_branch].getVertices().size(); current_node++){
-//                branches[current_level][current_branch].setColorForIndices(0,current_node,ofColor(90,0))
-//                branches[current_level][current_branch].setColor(current_node,ofColor(90,0,255));
-//            }
-//        }
-//    }
+    int t_driver = ofGetElapsedTimeMillis()/10;
+
+    if(t_driver != driver){
+        if(this->level < branches.size()){
+            if(this->branch < branches[this->level].size()){
+                if(this->node < branches[this->level][this->branch].getVertices().size()){
+                    ofColor color = branches[this->level][this->branch].getColor(this->node);
+                    
+//                    branches[this->level][this->branch].setColor(this->node - 1, ofColor(255,255,255,0));
+                    branches[this->level][this->branch].setColor(this->node, ofColor(255,255,255,255));
+                    
+                    this->node++;
+                }else{
+                    this->node = 1;
+                    this->branch++;
+                }
+            }else{
+                this->branch = 0;
+                this->level++;
+            }
+        }else{
+            this->level = 0;
+            
+            colorMesh(3);
+        }
+    }
+    driver = t_driver;
 }

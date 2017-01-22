@@ -10,6 +10,19 @@ public:
     ofColor light_color;
 
     void animateCapillary();
+    void drawAnimatedCapillary();
+    
+    ofMaterial material;
     
     ofxCapillary();
+    
+    void setup();
+    
+private:
+    
+    int driver;
+    
+    int level;
+    int branch;
+    int node;
 };
