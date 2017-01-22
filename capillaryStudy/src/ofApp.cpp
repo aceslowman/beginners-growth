@@ -50,7 +50,7 @@ void ofApp::draw(){
     ofEnableDepthTest();
     ofEnableAlphaBlending();
     
-    ofSetBackgroundColor(ofFloatColor(0));
+    ofSetBackgroundColor(ofFloatColor(255));
     ofSetColor(ofColor(0));
     
     cam.begin();

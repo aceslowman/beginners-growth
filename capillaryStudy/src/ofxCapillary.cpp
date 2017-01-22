@@ -25,21 +25,33 @@ void ofxCapillary::animateCapillary(){
         Right at the beginning, calculate full number of nodes
      */
     
-    int t_driver = ofGetElapsedTimeMillis()/10;
+    int t_driver = ofGetElapsedTimeMillis()/15;
+    
+    int t_num_levels = branches.size();
 
     if(t_driver != driver){
-        if(this->level < branches.size()){
-            if(this->branch < branches[this->level].size()){
-                if(this->node < branches[this->level][this->branch].getVertices().size()){
-                    ofColor color = branches[this->level][this->branch].getColor(this->node);
+        if(this->level < t_num_levels){
+            int t_num_branches = branches[this->level].size();
+            
+            
+            if(this->branch < t_num_branches){
+                for(int i = 0; i < t_num_branches; i++){
+                    int t_num_nodes = branches[this->level][i].getVertices().size();
                     
-//                    branches[this->level][this->branch].setColor(this->node - 1, ofColor(255,255,255,0));
-                    branches[this->level][this->branch].setColor(this->node, ofColor(255,255,255,255));
-                    
-                    this->node++;
-                }else{
-                    this->node = 1;
-                    this->branch++;
+                    if(this->node < t_num_nodes){
+//                        for(int j = 0; j < t_num_nodes; j++){
+                        
+                            ofColor color = branches[this->level][i].getColor(this->node);
+                            
+//                            branches[this->level][this->branch].setColor(this->node - 1, ofColor(255,255,255,0));
+                            branches[this->level][i].setColor(this->node, ofColor(0,0,0,255));
+                            
+                            this->node++;
+//                        }
+                    }else{
+                        this->node = 1;
+                        this->branch++;
+                    }
                 }
             }else{
                 this->branch = 0;
@@ -47,6 +59,9 @@ void ofxCapillary::animateCapillary(){
             }
         }else{
             this->level = 0;
+            
+//            ofxGrowth::clearAll();
+//            ofxGrowth::setup();
             
             colorMesh(3);
         }
