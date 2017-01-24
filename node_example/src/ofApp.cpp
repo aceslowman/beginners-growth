@@ -2,18 +2,18 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    growth.setup();
+    capillary.setup();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+    capillary.animateCapillary();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     cam.begin();
-    growth.draw();
+    capillary.draw();
     cam.end();
 }
 

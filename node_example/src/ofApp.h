@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxGrowth.h"
+#include "ofxCapillary.h"
 
 class ofApp : public ofBaseApp{
 
@@ -24,5 +25,5 @@ class ofApp : public ofBaseApp{
 		
     ofEasyCam cam;
     
-    ofxGrowth growth;
+    ofxCapillary capillary;
 };
