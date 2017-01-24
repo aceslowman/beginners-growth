@@ -72,6 +72,7 @@
 		C9109422648B170B07A778CF /* SyphonNameboundClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E3405C5AE387BDDC2AD19473 /* SyphonNameboundClient.m */; };
 		D31F5C1B140C59B2AF1533A8 /* registration.c in Sources */ = {isa = PBXBuildFile; fileRef = 71958293AC5292DE4B7C619D /* registration.c */; };
 		D3301F6A0B43BB293ED97C1D /* ofxCvShortImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A4DD23693DFAB8EC05FAA5D /* ofxCvShortImage.cpp */; };
+		D9C4128A1E36D23D0048A3C3 /* ofxGrowthBranch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9C412881E36D23D0048A3C3 /* ofxGrowthBranch.cpp */; };
 		D9D336821E331D1B007F18C9 /* ofxCapillary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9D336801E331D1B007F18C9 /* ofxCapillary.cpp */; };
 		DBCB84A37F9AECC254870D79 /* Wrappers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D347FB65D19015303863922A /* Wrappers.cpp */; };
 		E1A3FD40C8BCD507345F1126 /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D58DCB2C0AEFDE6171E29540 /* Syphon.framework */; };
@@ -434,6 +435,8 @@
 		D902EB2409214285BCF5F191 /* stream_accessor.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = stream_accessor.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/gpu/stream_accessor.hpp; sourceTree = SOURCE_ROOT; };
 		D9613459E2788BF99E572ED1 /* deblurring.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = deblurring.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/videostab/deblurring.hpp; sourceTree = SOURCE_ROOT; };
 		D9BFFBBF4CC43DEE890B3C3E /* OscTypes.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = OscTypes.cpp; path = ../../../addons/ofxOsc/libs/oscpack/src/osc/OscTypes.cpp; sourceTree = SOURCE_ROOT; };
+		D9C412881E36D23D0048A3C3 /* ofxGrowthBranch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxGrowthBranch.cpp; path = ../../../addons/ofxGrowth/src/ofxGrowthBranch.cpp; sourceTree = "<group>"; };
+		D9C412891E36D23D0048A3C3 /* ofxGrowthBranch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxGrowthBranch.h; path = ../../../addons/ofxGrowth/src/ofxGrowthBranch.h; sourceTree = "<group>"; };
 		D9D336801E331D1B007F18C9 /* ofxCapillary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxCapillary.cpp; sourceTree = "<group>"; };
 		D9D336811E331D1B007F18C9 /* ofxCapillary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxCapillary.h; sourceTree = "<group>"; };
 		DA71BD3D5EB1A1F5E64B6751 /* gpu.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = gpu.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/nonfree/gpu.hpp; sourceTree = SOURCE_ROOT; };
@@ -1348,6 +1351,8 @@
 		C1C305D8AB777C1D797BA72D /* src */ = {
 			isa = PBXGroup;
 			children = (
+				D9C412881E36D23D0048A3C3 /* ofxGrowthBranch.cpp */,
+				D9C412891E36D23D0048A3C3 /* ofxGrowthBranch.h */,
 				E4A3D1701E60A55DDB3C4B74 /* ofxGrowth.cpp */,
 				4CB1EF17901F3AB3DA709B0A /* ofxGrowth.h */,
 			);
@@ -1786,6 +1791,7 @@
 				255A7B680DC81E543C875794 /* usb_libusb10.c in Sources */,
 				960D20B191346612D5C05A6A /* ofxTCPClient.cpp in Sources */,
 				125506CD3E5F428AAFE5CC65 /* ofxTCPManager.cpp in Sources */,
+				D9C4128A1E36D23D0048A3C3 /* ofxGrowthBranch.cpp in Sources */,
 				66CA411C5A9664E27326BF36 /* ofxTCPServer.cpp in Sources */,
 				E2564CF7DDB3713772BB682E /* ofxUDPManager.cpp in Sources */,
 				250A95BA26587BE85DB0A353 /* ofxCvColorImage.cpp in Sources */,
