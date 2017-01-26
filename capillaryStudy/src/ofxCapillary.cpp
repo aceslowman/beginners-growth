@@ -59,10 +59,6 @@ void ofxCapillary::animateCapillary(){
             }
         }else{
             this->level = 0;
-            
-//            ofxGrowth::clearAll();
-//            ofxGrowth::setup();
-            
             colorMesh(3);
         }
     }
