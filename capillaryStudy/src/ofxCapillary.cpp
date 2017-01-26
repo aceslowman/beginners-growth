@@ -68,5 +68,3 @@ void ofxCapillary::animateCapillary(){
     }
     driver = t_driver;
 }
-
-

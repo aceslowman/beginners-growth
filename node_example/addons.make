@@ -1,4 +1,0 @@
-ofxGrowth
-ofxGui
-ofxSyphon
-ofxXmlSettings
