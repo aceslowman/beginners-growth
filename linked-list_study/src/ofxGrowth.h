@@ -11,9 +11,12 @@ public:
     
     void setup();
     
-    ofxGrowth();
-    
-private:
-    
     ofVec3f growth_vector;
+    ofVec3f initial_growth;
+    
+    float length;
+    float crookedness;
+    float density;
+    
+    ofxGrowth();
 };
