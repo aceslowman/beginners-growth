@@ -18,7 +18,7 @@ void ofxGrowthNode::setup(){
     //update location
     location = parent->location + (growth_vector * length);
     
-    if(ofRandomuf() < tree.density){
+    if(ofRandomuf() < tree.density && distance_to_center < 20){
         generateChild();
     }
 }

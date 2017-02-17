@@ -540,8 +540,6 @@
 				GCC_MODEL_TUNING = NONE;
 				HEADER_SEARCH_PATHS = (
 					"$(OF_CORE_HEADERS)",
-					../../../addons/ofxGrowth/libs,
-					../../../addons/ofxGrowth/src,
 					../../../addons/ofxGui/src,
 					../../../addons/ofxSyphon/libs,
 					../../../addons/ofxSyphon/libs/Syphon,
@@ -578,8 +576,6 @@
 				GCC_MODEL_TUNING = NONE;
 				HEADER_SEARCH_PATHS = (
 					"$(OF_CORE_HEADERS)",
-					../../../addons/ofxGrowth/libs,
-					../../../addons/ofxGrowth/src,
 					../../../addons/ofxGui/src,
 					../../../addons/ofxSyphon/libs,
 					../../../addons/ofxSyphon/libs/Syphon,

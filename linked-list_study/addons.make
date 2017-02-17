@@ -1,4 +1,3 @@
-ofxGrowth
 ofxGui
 ofxSyphon
 ofxXmlSettings
