@@ -20,7 +20,7 @@ public:
 
     
     void setupNode();
-    void generateChild();
+    void generateChildren();
     
     ofxGrowthNode(ofxGrowth &t);
     ofxGrowthNode(ofxGrowth &t, ofxGrowthNode* p);

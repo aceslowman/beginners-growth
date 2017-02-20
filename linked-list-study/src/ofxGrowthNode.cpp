@@ -6,7 +6,7 @@ ofxGrowthNode::ofxGrowthNode(ofxGrowth &t): tree(t) {
     level              = 0;
     growth_vector      = t.growth_vector;
     
-    generateChild();
+    generateChildren();
 }
 
 ofxGrowthNode::ofxGrowthNode(ofxGrowth &t, ofxGrowthNode* p): tree(t), parent(p) {
@@ -30,13 +30,26 @@ void ofxGrowthNode::setupNode(){
     //update location
     location = parent->location + (growth_vector * length);
     
-    if(ofRandomuf() < tree.density && distance_to_center < 20){
-        generateChild();
+    if(level < tree.depth){
+        generateChildren();
     }
 }
 
 //--------------------------------------------------------------
-void ofxGrowthNode::generateChild(){
-    shared_ptr<ofxGrowthNode> child(new ofxGrowthNode(tree,this));
-    children.push_back(child);
+void ofxGrowthNode::generateChildren(){
+    //generate next in branch
+    if(distance_to_center < 20){
+        shared_ptr<ofxGrowthNode> child(new ofxGrowthNode(tree,this));
+        children.push_back(child);
+        
+        //generate next in new branch
+        if(ofRandomuf() < tree.density){
+            shared_ptr<ofxGrowthNode> child(new ofxGrowthNode(tree,this));
+            //what are some of the differences when I go into a further branch?
+            //I have to apply alterations to the chain here:
+            
+            child->level = level + 1;
+            children.push_back(child);
+        }
+    }
 }
