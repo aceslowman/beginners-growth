@@ -26,28 +26,42 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/ofxGrowth.cpp"
-            timestampString = "509247434.551564"
+            timestampString = "509330062.779379"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "88"
-            endingLineNumber = "88"
-            landmarkName = "ofxGrowth::checkChildren(ofxGrowthNode * temp_node, ofMesh * temp_mesh)"
+            startingLineNumber = "86"
+            endingLineNumber = "86">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "src/ofxGrowth.cpp"
+            timestampString = "509329685.316869"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
+            landmarkName = "ofxGrowth::setupMesh()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "src/ofxGrowth.cpp"
-            timestampString = "509247434.551564"
+            timestampString = "509330062.779379"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
-            landmarkName = "ofxGrowth::setupMesh()"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "ofxGrowth::drawMesh()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
